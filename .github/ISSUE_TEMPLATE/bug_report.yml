@@ -1,0 +1,63 @@
+name: Bug report
+description: Something doesn't work as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. **Never paste real personal data** (contacts, CSV rows, card photos). Use made-up examples.
+        Security problems go through [private reporting](https://github.com/faraj118/personal-network-analyzer/security/advisories/new) instead.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to …
+        2. Upload … (synthetic file)
+        3. See error
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CSV import
+        - Business-card OCR
+        - Deduplication / review queue
+        - Scoring
+        - Network discovery
+        - Enrichment / signals
+        - Local LLM features
+        - Tasks / pipeline / calendar
+        - Install / Docker
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How are you running PNCA?
+      options:
+        - Docker Compose
+        - Local Python (venv)
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: "e.g. Ubuntu 24.04, commit abc1234, LLM on/off"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or error output
+      description: Remove any personal data first.
+      render: shell

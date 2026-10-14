@@ -1,0 +1,45 @@
+name: Feature request
+description: Suggest an improvement or a new capability
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the [open issues](https://github.com/faraj118/personal-network-analyzer/issues) and [`docs/FEATURES.md`](https://github.com/faraj118/personal-network-analyzer/blob/main/docs/FEATURES.md) first. It may already be planned.
+        Open-ended ideas fit better in [Discussions](https://github.com/faraj118/personal-network-analyzer/discussions).
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation, not the solution. "When I … I can't …"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Project boundaries (SPEC.md §15)
+      options:
+        - label: Works fully locally, with no cloud LLM, paid API or telemetry
+          required: true
+        - label: Doesn't need scraping login-walled sites or evading blocks
+          required: true
+        - label: Only concerns the user's own contacts and avoids special-category data
+          required: true
+  - type: dropdown
+    id: help
+    attributes:
+      label: Would you like to work on this?
+      options:
+        - "Yes, I'd like to build it"
+        - Yes, with some guidance
+        - No, just suggesting
