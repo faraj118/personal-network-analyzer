@@ -1,0 +1,17 @@
+# Seniority keyword gazetteer (SPEC.md §6). Secondary signal to titles.yaml.
+# Used when a title token is ambiguous; maps keyword -> seniority enum.
+C-Level:
+  - chief
+  - executive
+Director:
+  - director
+  - head
+Manager:
+  - manager
+  - lead
+  - principal
+Entry:
+  - junior
+  - entry
+  - graduate
+  - intern

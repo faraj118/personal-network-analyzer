@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Your Network</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d;
+            --accent:#4f9cf9; --warn:#f0a34d; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:1100px; margin:0 auto; padding:32px 20px 64px; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 24px; }
+    .stats { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+    .stat { background:var(--card); border:1px solid var(--line); border-radius:12px;
+            padding:14px 18px; min-width:120px; }
+    .stat .n { font-size:26px; font-weight:700; }
+    .stat .l { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+    form.up { background:var(--card); border:1px dashed var(--line); border-radius:12px;
+              padding:16px 18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .add { background:var(--card); border:1px solid var(--line); border-radius:12px;
+           padding:16px 18px; margin-bottom:24px; }
+    .add > h2 { font-size:16px; margin:0 0 12px; border-left:3px solid var(--accent); padding-left:10px; }
+    .add input[type=radio] { display:none; }
+    .tabnav { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+    .tablabel { padding:7px 13px; border-radius:8px; background:#0f1826; border:1px solid var(--line);
+                color:var(--muted); cursor:pointer; font-size:13px; font-weight:600; }
+    .tabpanel { display:none; }
+    .add form.up { border:0; padding:0; margin:0; }
+    #tab-csv:checked    ~ .tabnav label[for=tab-csv],
+    #tab-card:checked   ~ .tabnav label[for=tab-card],
+    #tab-manual:checked ~ .tabnav label[for=tab-manual] { background:var(--accent); color:#04101f; border-color:var(--accent); }
+    #tab-csv:checked    ~ .p-csv,
+    #tab-card:checked   ~ .p-card,
+    #tab-manual:checked ~ .p-manual { display:block; }
+    input[type=file] { color:var(--muted); }
+    input:not([type=file]), select { background:#0f1826; color:var(--ink); border:1px solid var(--line);
+                             border-radius:8px; padding:8px 10px; }
+    button { background:var(--accent); color:#04101f; border:0; border-radius:8px;
+             padding:9px 16px; font-weight:600; cursor:pointer; }
+    table { width:100%; border-collapse:collapse; background:var(--card);
+            border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    th,td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+    tr:last-child td { border-bottom:0; }
+    .tag { display:inline-block; padding:2px 9px; border-radius:999px; font-size:12px;
+           background:#20304a; color:var(--ink); border:1px solid var(--line); }
+    .score { font-weight:700; }
+    .bar { height:6px; border-radius:4px; background:#20304a; margin-top:4px; overflow:hidden; }
+    .bar > i { display:block; height:100%; background:var(--accent); }
+    .review { color:var(--warn); font-size:12px; }
+    .empty { color:var(--muted); text-align:center; padding:48px; background:var(--card);
+             border:1px solid var(--line); border-radius:12px; }
+    .today { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px; }
+    .tcard { flex:1; min-width:260px; background:var(--card); border:1px solid var(--line);
+             border-radius:12px; padding:14px 18px; }
+    .tcard .l { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px; }
+    .trow { display:flex; justify-content:space-between; gap:10px; padding:4px 0; border-bottom:1px solid var(--line); }
+    .trow:last-child { border-bottom:0; }
+    .tmeta { color:var(--muted); font-size:13px; }
+    .tact { display:flex; gap:6px; align-items:center; }
+    .mini { background:#20304a; color:var(--ink); border:1px solid var(--line);
+            border-radius:6px; padding:2px 7px; font-size:12px; font-weight:600; }
+    .mini:hover { background:#2a3d5c; }
+    .search { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+    .bulkbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; background:var(--card);
+               border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-top:10px; }
+    .bulkbar .mini2 { background:#20304a; color:var(--ink); border:1px solid var(--line);
+                      border-radius:7px; padding:7px 11px; font-size:13px; font-weight:600; }
+    .bulkbar .mini2:hover { background:#2a3d5c; }
+    .foot { color:var(--muted); font-size:12px; margin-top:20px; }
+    code { background:#20304a; padding:1px 6px; border-radius:5px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>PNCA — Your Network</h1>
+    <p class="sub">Your private, local relationship assistant.
+       · <a href="/network" style="color:#4f9cf9">Network →</a>
+       · <a href="/review" style="color:#4f9cf9">Review →</a>
+       · <a href="/calendar" style="color:#4f9cf9">Planning →</a></p>
+
+    <h2 style="font-size:16px;margin:0 0 12px;border-left:3px solid #4f9cf9;padding-left:10px">☀️ Today — who to reach out to</h2>
+    <div class="today">
+      <div class="tcard">
+        <div class="l">📋 Tasks <span style="text-transform:none">({{ today.tasks.open_count }} open)</span> · <a href="/tasks" style="color:#4f9cf9">all →</a></div>
+        {% set task_rows = today.tasks.overdue + today.tasks.due_soon %}
+        {% if task_rows %}
+          {% for t in task_rows %}
+          <div class="trow"><span>{{ t.title }}{% if t.contact_id %} <a href="/contact/{{ t.contact_id }}" class="tmeta">· {{ t.contact_name or 'contact' }}</a>{% endif %}</span>
+            <span class="tact">
+              <span class="tmeta">{{ t.due_date or '—' }}</span>
+              <form method="post" action="/ui/tasks/{{ t.id }}/done" style="display:inline">
+                <input type="hidden" name="next" value="/" />
+                <button class="mini" title="Mark done">✓</button></form>
+            </span></div>
+          {% endfor %}
+        {% else %}<div class="tmeta">No tasks due. <a href="/tasks">Add a task →</a></div>{% endif %}
+      </div>
+      <div class="tcard">
+        <div class="l">⏰ Overdue follow-ups</div>
+        {% if today.overdue %}
+          {% for i in today.overdue %}
+          <div class="trow"><a href="/contact/{{ i.id }}">{{ i.name }}</a>
+            <span class="tact">
+              <span class="tmeta">{{ i.follow_up_date }}</span>
+              <form method="post" action="/ui/contact/{{ i.id }}/logtouch" style="display:inline">
+                <button class="mini" title="Log a touch &amp; clear this follow-up">✓ Done</button></form>
+              <form method="post" action="/ui/contact/{{ i.id }}/snooze" style="display:inline">
+                <input type="hidden" name="days" value="7" />
+                <button class="mini" title="Snooze 7 days">💤</button></form>
+            </span></div>
+          {% endfor %}
+        {% else %}<div class="tmeta">Nothing overdue. <a href="/calendar">Plan follow-ups →</a></div>{% endif %}
+      </div>
+      <div class="tcard">
+        <div class="l">🔄 Reconnect <span style="text-transform:none">(important, gone quiet 90d+)</span></div>
+        {% if today.reconnect %}
+          {% for c in today.reconnect %}
+          <div class="trow"><a href="/contact/{{ c.id }}">{{ (c.first_name or '') ~ ' ' ~ (c.last_name or '') }}</a>
+            <span class="tact">
+              <span class="tmeta">{{ 'never' if not c.last_contact else c.last_contact }} · {{ c.importance or 0 }}</span>
+              <form method="post" action="/ui/contact/{{ c.id }}/logtouch" style="display:inline">
+                <button class="mini" title="Log that you reached out">✓ Reached</button></form>
+            </span></div>
+          {% endfor %}
+        {% else %}<div class="tmeta">No one overdue to reconnect. 👌</div>{% endif %}
+      </div>
+      <div class="tcard">
+        <div class="l">⭐ Top people to reach</div>
+        {% if today.top %}
+          {% for c in today.top %}
+          <div class="trow"><a href="/contact/{{ c.id }}">{{ (c.first_name or '') ~ ' ' ~ (c.last_name or '') }}</a>
+            <span class="tmeta">{{ c.company or '—' }}{% if c.opportunity %} · {{ c.opportunity }}{% endif %}</span></div>
+          {% endfor %}
+        {% else %}<div class="tmeta">Add or import contacts to see suggestions.</div>{% endif %}
+      </div>
+    </div>
+
+    <div class="add">
+      <h2>➕ Add contacts</h2>
+      <input type="radio" name="addtab" id="tab-csv" checked />
+      <input type="radio" name="addtab" id="tab-card" />
+      <input type="radio" name="addtab" id="tab-manual" />
+      <div class="tabnav">
+        <label class="tablabel" for="tab-csv">LinkedIn export</label>
+        <label class="tablabel" for="tab-card">Business card</label>
+        <label class="tablabel" for="tab-manual">Type it in</label>
+      </div>
+
+      <div class="tabpanel p-csv">
+        <form class="up" action="/ui/upload" method="post" enctype="multipart/form-data">
+          <span>Import your LinkedIn <code>Connections.csv</code>:</span>
+          <input type="file" name="files" accept=".csv" multiple required />
+          <button type="submit">Upload &amp; rebuild</button>
+        </form>
+      </div>
+
+      <div class="tabpanel p-card">
+        <form class="up" action="/ui/upload-card" method="post" enctype="multipart/form-data">
+          <span>Photograph or scan a business card (JPG/PNG):</span>
+          <input type="file" name="files" accept="image/*" multiple required />
+          <button type="submit">Read cards &amp; review</button>
+        </form>
+      </div>
+
+      <div class="tabpanel p-manual">
+        <form class="up" action="/ui/contact/add" method="post">
+          <input name="first_name" placeholder="First" style="max-width:90px" />
+          <input name="last_name" placeholder="Last" style="max-width:90px" />
+          <input name="company" placeholder="Company" style="max-width:130px" />
+          <input name="job_title" placeholder="Title" style="max-width:130px" />
+          <select name="seniority">
+            <option value="">Seniority…</option>
+            {% for s in ['C-Level','Director','Manager','Entry','Unknown'] %}<option>{{ s }}</option>{% endfor %}
+          </select>
+          <input name="email" placeholder="Email" style="max-width:150px" />
+          <input name="website" placeholder="Company website" style="max-width:160px" />
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+
+    {% if views %}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+      <span class="tmeta" style="color:#8aa0bd">Saved views:</span>
+      {% for v in views %}
+      <span class="tag" style="display:inline-flex;gap:6px;align-items:center">
+        <a href="/?{% for k,val in v.params.items() %}{{ k }}={{ val|urlencode }}&{% endfor %}" style="color:#e6edf6">{{ v.name }}</a>
+        <form method="post" action="/ui/views/{{ v.id }}/delete" style="display:inline">
+          <button title="delete" style="background:none;border:0;color:#f0705a;cursor:pointer;padding:0">×</button>
+        </form>
+      </span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form class="search" action="/" method="get">
+      <input name="q" value="{{ filters.q }}" placeholder="Search name or company…" style="flex:1;min-width:150px" />
+      <select name="industry">
+        <option value="">All industries</option>
+        {% for i in ['Tech','Fintech','Manufacturing','Oil & Gas','Finance','Construction'] %}
+        <option value="{{ i }}" {% if filters.industry == i %}selected{% endif %}>{{ i }}</option>{% endfor %}
+      </select>
+      <select name="seniority">
+        <option value="">All seniorities</option>
+        {% for s in ['C-Level','Director','Manager','Entry','Unknown'] %}
+        <option value="{{ s }}" {% if filters.seniority == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+      </select>
+      <select name="pipeline_stage">
+        <option value="">Any stage</option>
+        {% for st in ['Idea','Talking','Proposal','Won','Lost'] %}
+        <option value="{{ st }}" {% if filters.pipeline_stage == st %}selected{% endif %}>{{ st }}</option>{% endfor %}
+      </select>
+      <input name="tag" value="{{ filters.tag }}" placeholder="tag" style="max-width:110px" />
+      <input name="min_score" value="{{ filters.min_score }}" type="number" placeholder="min score" style="max-width:100px" />
+      <button type="submit">Search</button>
+      {% if filters.q or filters.industry or filters.seniority or filters.tag or filters.pipeline_stage or filters.min_score or filters.missing %}<a href="/" style="align-self:center">clear</a>{% endif %}
+    </form>
+
+    {% if filters.missing %}
+    {% set _missing_labels = {'email':'no email','company':'no company','title':'no job title','industry':'no industry','seniority':'unknown seniority'} %}
+    <p class="tmeta" style="margin:-4px 0 12px">Showing contacts with <b style="color:#e6edf6">{{ _missing_labels.get(filters.missing, filters.missing) }}</b> · <a href="/" style="color:#4f9cf9">clear</a></p>
+    {% endif %}
+
+    <form class="search" action="/ui/views/save" method="post" style="margin-top:-6px">
+      <input type="hidden" name="q" value="{{ filters.q }}" />
+      <input type="hidden" name="industry" value="{{ filters.industry }}" />
+      <input type="hidden" name="seniority" value="{{ filters.seniority }}" />
+      <input type="hidden" name="tag" value="{{ filters.tag }}" />
+      <input type="hidden" name="pipeline_stage" value="{{ filters.pipeline_stage }}" />
+      <input type="hidden" name="min_score" value="{{ filters.min_score }}" />
+      <input name="name" placeholder="Save current filters as a view…" style="flex:1;min-width:200px" />
+      <button type="submit">Save view</button>
+    </form>
+
+    {% if contacts %}
+    <form method="post" action="/ui/contacts/bulk">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:26px"><input type="checkbox" onclick="for(const b of this.closest('table').querySelectorAll('input[name=ids]'))b.checked=this.checked" title="Select all" /></th>
+          <th>Name</th><th>Title</th><th>Company</th>
+          <th>Seniority</th><th>Industry</th><th title="Deterministic priority from seniority, industry, location, opportunity">Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in contacts %}
+        <tr>
+          <td><input type="checkbox" name="ids" value="{{ c.id }}" /></td>
+          <td>
+            <a href="/contact/{{ c.id }}" style="color:#e6edf6">{{ (c.first_name or '') ~ ' ' ~ (c.last_name or '') }}</a>
+            {% if c.needs_review %}<div class="review">⚑ needs review</div>{% endif %}
+          </td>
+          <td>{{ c.job_title or '—' }}</td>
+          <td>{{ c.company or '—' }}</td>
+          <td><span class="tag">{{ c.seniority or 'Unknown' }}</span></td>
+          <td>{% if c.industry %}<span class="tag">{{ c.industry }}</span>{% else %}—{% endif %}</td>
+          <td>
+            <span class="score">{{ c.importance or 0 }}</span>
+            <div class="bar"><i style="width: {{ c.importance or 0 }}%"></i></div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="bulkbar">
+      <span class="tmeta" style="color:#8aa0bd">With checked contacts:</span>
+      <input name="tag" placeholder="tag" style="max-width:120px" />
+      <button class="mini2" name="action" value="add_tag" type="submit">Add tag</button>
+      <select name="stage">
+        <option value="">stage…</option>
+        {% for st in ['Idea','Talking','Proposal','Won','Lost'] %}<option>{{ st }}</option>{% endfor %}
+      </select>
+      <button class="mini2" name="action" value="set_stage" type="submit">Set stage</button>
+      <input name="follow_up_date" type="date" />
+      <button class="mini2" name="action" value="set_follow_up" type="submit">Set follow-up</button>
+      <button class="mini2" name="action" value="clear_follow_up" type="submit">Clear follow-up</button>
+    </div>
+    </form>
+    {% else %}
+    {% if filters.q or filters.industry or filters.seniority or filters.missing or filters.pipeline_stage or filters.tag %}
+    <div class="empty">No matches — <a href="/">clear the search</a>.</div>
+    {% else %}
+    <div class="empty">No contacts yet — import a LinkedIn <code>Connections.csv</code> above to get started.</div>
+    {% endif %}
+    {% endif %}
+
+    <div class="stats" style="margin-top:28px;margin-bottom:0">
+      <a href="/" class="stat" style="color:inherit;text-decoration:none"><div class="n">{{ stats.total }}</div><div class="l">Contacts</div></a>
+      <a href="/?seniority=C-Level" class="stat" style="color:inherit;text-decoration:none"><div class="n">{{ stats.c_level }}</div><div class="l">C-Level</div></a>
+      <div class="stat"><div class="n">{{ stats.top_score }}</div><div class="l">Top score</div></div>
+      <a href="/review" class="stat" style="color:inherit;text-decoration:none"><div class="n">{{ stats.needs_review }}</div><div class="l">Needs review</div></a>
+    </div>
+
+    <p class="foot">Served locally on 127.0.0.1 · no cloud calls · your data stays on this machine.</p>
+  </div>
+</body>
+</html>

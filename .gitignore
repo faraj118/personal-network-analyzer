@@ -1,0 +1,23 @@
+# --- Data & secrets (SPEC.md §12: DB gitignored, local-only) ---
+data/pnca.db
+data/pnca.db-wal
+data/pnca.db-shm
+data/uploads/*
+!data/uploads/.gitkeep
+
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+
+# --- OS / editor ---
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Pipeline</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d;
+            --accent:#4f9cf9; --ok:#4fd18b; --no:#f0705a; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:1200px; margin:0 auto; padding:24px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 18px; }
+    .board { display:flex; gap:12px; overflow-x:auto; align-items:flex-start; }
+    .col { flex:1; min-width:200px; background:var(--card); border:1px solid var(--line);
+           border-radius:12px; padding:12px; }
+    .col h2 { font-size:13px; margin:0 0 10px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+    .col.won h2 { color:var(--ok); } .col.lost h2 { color:var(--no); }
+    .cnt { color:var(--muted); font-weight:400; }
+    .cardlet { background:#0f1826; border:1px solid var(--line); border-radius:9px;
+               padding:9px 11px; margin-bottom:8px; }
+    .cardlet .n { font-weight:600; }
+    .cardlet .m { color:var(--muted); font-size:12px; }
+    .empty { color:var(--muted); font-size:13px; }
+    .foot { color:var(--muted); font-size:12px; margin-top:20px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Opportunity Pipeline</h1>
+    <p class="sub">Your deals by stage. Change a stage with the dropdown on each card,
+       or from <b>Edit details</b> on a contact's page.</p>
+
+    {% set placed = board.values() | map('length') | sum %}
+    {% if not placed %}
+    <div class="empty" style="text-align:center;padding:40px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px">
+      No deals in the pipeline yet. Open a contact, set an <b>Opportunity</b> and a <b>Pipeline</b> stage
+      (or use <b>Set stage</b> on the <a href="/">contacts list</a> to add several at once), and they'll show up here.
+    </div>
+    {% endif %}
+
+    <div class="board">
+      {% for stage, contacts in board.items() %}
+      <div class="col {{ stage|lower }}">
+        <h2>{{ stage }} <span class="cnt">({{ contacts|length }})</span></h2>
+        {% for c in contacts %}
+        <div class="cardlet">
+          <div class="n"><a href="/contact/{{ c.id }}">{{ (c.first_name or '') ~ ' ' ~ (c.last_name or '') }}</a></div>
+          <div class="m">{{ c.company or '—' }}{% if c.importance %} · {{ c.importance }}{% endif %}</div>
+          <form method="post" action="/ui/contact/{{ c.id }}/stage" style="margin-top:6px">
+            <select name="stage" onchange="this.form.submit()"
+                    style="width:100%;background:#182234;color:#8aa0bd;border:1px solid #26344d;border-radius:6px;padding:3px 6px;font-size:12px">
+              {% for st in ['Idea','Talking','Proposal','Won','Lost'] %}
+              <option value="{{ st }}" {% if st == stage %}selected{% endif %}>Move to {{ st }}</option>{% endfor %}
+              <option value="__clear__">— remove —</option>
+            </select>
+          </form>
+        </div>
+        {% else %}
+        <div class="empty">—</div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <p class="foot">Lightweight pipeline — each card links to the contact; nothing leaves your machine.</p>
+  </div>
+</body>
+</html>

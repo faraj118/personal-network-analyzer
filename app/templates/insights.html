@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Insights</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d; --accent:#4f9cf9; --ok:#4fd18b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:980px; margin:0 auto; padding:24px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 18px; }
+    h2 { font-size:15px; margin:22px 0 10px; border-left:3px solid var(--accent); padding-left:10px; }
+    .cards { display:flex; gap:12px; flex-wrap:wrap; }
+    .stat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px; min-width:150px; }
+    .stat .n { font-size:26px; font-weight:700; }
+    .stat .l { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+    .row { display:flex; justify-content:space-between; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); }
+    .row:last-child { border-bottom:0; }
+    .k { color:var(--muted); }
+    .btn { display:inline-block; background:var(--accent); color:#04101f; border-radius:8px; padding:8px 14px; font-weight:600; margin-right:8px; }
+    .foot { color:var(--muted); font-size:12px; margin-top:20px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Insights</h1>
+    <p class="sub">Your network at a glance — coverage vs your targets ({{ i.target_industries | join(', ') }}).</p>
+
+    <div class="cards">
+      <a class="stat" href="/" style="color:inherit"><div class="n">{{ i.total }}</div><div class="l">Contacts</div></a>
+      <div class="stat"><div class="n">{{ i.target_total }}</div><div class="l">In target industries</div></div>
+      <div class="stat"><div class="n">{{ i.target_senior }}</div><div class="l">Senior in target</div></div>
+      <a class="stat" href="/calendar" style="color:inherit"><div class="n">{{ i.reconnect_due }}</div><div class="l">Reconnect due</div></a>
+      <a class="stat" href="/review" style="color:inherit"><div class="n">{{ i.needs_review }}</div><div class="l">Needs review</div></a>
+    </div>
+
+    <h2>Pipeline <span style="font-size:12px;color:var(--muted)">— click a stage to see those deals</span></h2>
+    <div class="card">
+      {% for stage, n in i.pipeline.items() %}
+      <div class="row"><a class="k" href="/?pipeline_stage={{ stage | urlencode }}" style="color:var(--muted)">{{ stage }}</a><span>{{ n }}</span></div>
+      {% endfor %}
+    </div>
+
+    <h2>Distributions <span style="font-size:12px;color:var(--muted)">— click to filter the list</span></h2>
+    <div class="card">
+      <div class="row"><span class="k">By seniority</span>
+        <span>{% for k, n in i.by_seniority.items() %}<a href="/?seniority={{ k | urlencode }}" style="margin-left:8px">{{ k }} ({{ n }})</a>{% endfor %}</span></div>
+      <div class="row"><span class="k">By industry</span>
+        <span>{% if i.by_industry %}{% for k, n in i.by_industry.items() %}<a href="/?industry={{ k | urlencode }}" style="margin-left:8px">{{ k }} ({{ n }})</a>{% endfor %}{% else %}—{% endif %}</span></div>
+      <div class="row"><span class="k">By org prominence</span><span>{{ i.by_prominence or 'not scanned' }}</span></div>
+    </div>
+
+    <h2>Data completeness</h2>
+    <div class="card">
+      <div class="row"><span class="k">With email</span><span>{{ i.with_email }} / {{ i.total }}</span></div>
+      <div class="row"><span class="k">With phone</span><span>{{ i.with_phone }} / {{ i.total }}</span></div>
+    </div>
+
+    <h2>Export</h2>
+    <div class="card">
+      <a class="btn" href="/export?format=csv">Download CSV</a>
+      <a class="btn" href="/export?format=json">Download JSON</a>
+      <p class="foot" style="margin:10px 0 0">Your network, portable. Nothing leaves your machine until you share the file.</p>
+    </div>
+  </div>
+</body>
+</html>

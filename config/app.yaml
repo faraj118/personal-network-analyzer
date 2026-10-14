@@ -1,0 +1,36 @@
+# PNCA application config. Single source of truth for the server bind.
+# NEVER hardcode host/port in code — read them from here (app/config.py).
+server:
+  host: 127.0.0.1
+  port: 8199
+
+# Path to the SQLite database file (relative to repo root unless absolute).
+database:
+  path: data/pnca.db
+
+# Paths to rule/config assets, resolved relative to repo root.
+paths:
+  rubric: config/rubric.yaml
+  gazetteers: config/gazetteers
+  uploads: data/uploads
+
+# Local LLM via Ollama (SPEC.md §7, §17). Local-only, bounded, degrade-if-down.
+llm:
+  enabled: false               # deterministic path always works without it
+  base_url: http://ollama:11434   # compose service; PNCA_LLM_BASE_URL overrides
+  model: qwen2.5:1.5b          # measured fit for this machine (see docs/LLM.md); instruct-tuned by default
+  timeout_s: 60
+  max_input_chars: 8000        # cap prompt size (CPU latency guard)
+  invoke_on: [arabic, low_confidence]   # never the bulk CSV path
+
+# Enrichment engine (SPEC.md §8, §18). Free sources only, provenance-first, review-gated.
+enrichment:
+  enabled: false               # opt-in; per-contact manual/scheduled trigger
+  free_sources_only: true      # hard rule; no paid brokers
+  respect_robots: true
+  user_agent: "PNCA/0.0 (personal contact manager; single-user)"
+  min_delay_seconds: 5
+  max_delay_seconds: 15
+  stop_on_block: true          # 403/429/CAPTCHA -> stop, never circumvent
+  auto_accept_confidence: 0.95 # >= this may auto-accept (still provenance-tagged); else review
+  exclude_special_category: true   # no health/religion/ethnicity/politics/sexuality

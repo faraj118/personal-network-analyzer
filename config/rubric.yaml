@@ -1,0 +1,51 @@
+# Deterministic scoring rubric (SPEC.md §6). Same input -> same score.
+# REPLACE target_industries / target_geographies with your real targets.
+weights:
+  seniority: { C-Level: 40, Director: 28, Manager: 15, Entry: 5, Unknown: 8 }
+  industry:  { target_match: 30, adjacent: 12, other: 3 }
+  location:  { target_geo: 20, other: 5 }
+  opportunity: { Client: 10, Partner: 8, Supplier: 6, Other: 2 }
+  # Organization prominence (from Wikidata due-diligence, §18). global = large/public co.
+  prominence: { global: 25, established: 12, verified_smb: 4, unverified: 0 }
+  # Personal relevance: boost contacts matching the owner's focus (relevance_keywords).
+  relevance: { match: 18 }
+
+target_industries: [Tech, Fintech, Manufacturing]  # Fintech = owner's field (digital payments)
+
+# Owner's focus areas — a contact whose title/company/industry mentions any of these gets a
+# relevance boost. Tune to your goals (fintech / payments / strategy / management).
+relevance_keywords:
+  - fintech
+  - payments
+  - digital payment
+  - payment
+  - wallet
+  - remittance
+  - banking
+  - strategy
+  - stakeholder
+  - partnership
+  - entrepreneur
+  - venture
+  - project management
+  - product manager
+target_geographies: [Libya, GCC]
+
+# City/country aliases -> a target geography, so "Tripoli" credits Libya (literal matcher).
+# Only aliases for geographies listed in target_geographies are applied.
+geo_aliases:
+  Libya: [libya, tripoli, benghazi, misrata, misurata, sabha, zawiya, bayda, tobruk, khoms,
+          zliten, sirte, ajdabiya, derna, sabratha, zawia]
+  GCC: [gcc, uae, united arab emirates, dubai, abu dhabi, sharjah, ajman,
+        saudi, saudi arabia, ksa, riyadh, jeddah, dammam, khobar,
+        qatar, doha, kuwait, bahrain, manama, oman, muscat]
+
+# Closed enums — classify.py must map to one of these or 'Unknown'. Never guess.
+enums:
+  seniority: [C-Level, Director, Manager, Entry, Unknown]
+  opportunity: [Client, Partner, Supplier, Other]
+
+# Routing thresholds (SPEC.md §6).
+thresholds:
+  ocr_confidence_min: 0.75
+  field_confidence_min: 0.60

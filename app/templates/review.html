@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Review</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d;
+            --accent:#4f9cf9; --ok:#4fd18b; --no:#f0705a; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:1000px; margin:0 auto; padding:32px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 20px; }
+    h2 { font-size:16px; margin:26px 0 12px; border-left:3px solid var(--accent); padding-left:10px; }
+    .item { background:var(--card); border:1px solid var(--line); border-radius:12px;
+            padding:14px 16px; margin-bottom:10px; display:flex; justify-content:space-between; gap:14px; align-items:center; }
+    .who { color:var(--muted); font-size:13px; }
+    .claim b { color:var(--ink); }
+    .src { font-size:12px; }
+    .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px;
+            background:#20304a; border:1px solid var(--line); }
+    form { display:inline; }
+    button { border:0; border-radius:8px; padding:7px 12px; font-weight:600; cursor:pointer; margin-left:6px; }
+    .accept { background:var(--ok); color:#04120a; }
+    .reject { background:var(--no); color:#1a0603; }
+    .empty { color:var(--muted); text-align:center; padding:36px; background:var(--card);
+             border:1px solid var(--line); border-radius:12px; }
+    .foot { color:var(--muted); font-size:12px; margin-top:24px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Review</h1>
+    <p class="sub"><a href="/">← Contacts</a> · <a href="/network">Network →</a>
+       · Nothing enters a contact until you accept it. Every claim carries its source (§18).</p>
+
+    <h2>⏳ Pending enrichment claims</h2>
+    {% if pending %}
+      {% for p in pending %}
+      <div class="item">
+        <div>
+          <div class="who">{{ p.contact_name }}</div>
+          <div class="claim">set <b>{{ p.field }}</b> → <b>{{ p.value }}</b>
+            <span class="pill">conf {{ '%.2f' % p.confidence }}</span></div>
+          <div class="src"><a href="{{ p.source_url }}" target="_blank" rel="noopener">{{ p.source_url }}</a></div>
+        </div>
+        <div>
+          <form method="post" action="/ui/review/{{ p.id }}/accept"><button class="accept">Accept</button></form>
+          <form method="post" action="/ui/review/{{ p.id }}/reject"><button class="reject">Reject</button></form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">No pending claims. Add sourced claims via <code>POST /enrich/&lt;id&gt;</code>.</div>
+    {% endif %}
+
+    <h2>📰 Opportunity signals</h2>
+    {% if signals %}
+      {% for s in signals %}
+      <div class="item">
+        <div>
+          <div class="who">{{ s.contact_name }} · <span class="pill">{{ s.kind }}</span></div>
+          <div class="claim">{{ s.summary }}</div>
+          <div class="src"><a href="{{ s.source_url }}" target="_blank" rel="noopener">source</a></div>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">No signals yet. Trigger a scan: <code>POST /signals/scan</code> (free news source).</div>
+    {% endif %}
+
+    <p class="foot">Free public sources · robots-respecting, rate-limited, stop-on-block · local only.</p>
+  </div>
+</body>
+</html>

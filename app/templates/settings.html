@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Settings</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d; --accent:#4f9cf9; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:900px; margin:0 auto; padding:24px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 18px; }
+    h2 { font-size:15px; margin:22px 0 10px; border-left:3px solid var(--accent); padding-left:10px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+    .row { display:flex; justify-content:space-between; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); }
+    .row:last-child { border-bottom:0; }
+    .k { color:var(--muted); }
+    .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; background:#20304a; border:1px solid var(--line); }
+    button { background:var(--accent); color:#04101f; border:0; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; }
+    form { display:inline; }
+    .prov { font-size:12px; color:var(--muted); }
+    .foot { color:var(--muted); font-size:12px; margin-top:20px; }
+    code { background:#20304a; padding:1px 6px; border-radius:5px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Settings</h1>
+    <p class="sub">Control center — status + actions. Weights/targets live in <code>config/rubric.yaml</code>; live editing here is on the roadmap.</p>
+
+    <h2>Status</h2>
+    <div class="card">
+      <div class="row"><span class="k">Contacts</span><span>{{ total }}</span></div>
+      <div class="row"><span class="k">Companies scanned (prominence)</span><span>{{ companies_scanned }}</span></div>
+      <div class="row"><span class="k">Local AI (Ollama)</span><span><span class="pill">{{ 'on' if cfg.llm.enabled else 'off' }}</span> {{ cfg.llm.model }}</span></div>
+      <div class="row"><span class="k">Enrichment</span><span><span class="pill">{{ 'on' if cfg.enrichment.enabled else 'off' }}</span> free sources only</span></div>
+    </div>
+
+    <h2>Targets &amp; weights <span class="prov">(edit in config/rubric.yaml)</span></h2>
+    <div class="card">
+      <div class="row"><span class="k">Target industries</span><span>{{ rubric.target_industries | join(', ') }}</span></div>
+      <div class="row"><span class="k">Target geographies</span><span>{{ rubric.target_geographies | join(', ') }}</span></div>
+      <div class="row"><span class="k">Seniority weights</span><span>{{ rubric.weights.seniority }}</span></div>
+      <div class="row"><span class="k">Prominence weights</span><span>{{ rubric.weights.prominence }}</span></div>
+    </div>
+
+    <h2>Actions</h2>
+    <div class="card">
+      <form method="post" action="/ui/settings/rebuild"><button>Rebuild contacts</button></form>
+      <form method="post" action="/ui/settings/company-scan"><button>Scan 25 companies (prominence)</button></form>
+      <p class="prov" style="margin:10px 0 0">Rebuild re-derives contacts from your source data + re-applies edits/enrichment. Company scan looks up org prominence on Wikidata (free, rate-limited).</p>
+    </div>
+
+    <p class="foot">Everything runs locally on 127.0.0.1 · no cloud, no telemetry.</p>
+  </div>
+</body>
+</html>

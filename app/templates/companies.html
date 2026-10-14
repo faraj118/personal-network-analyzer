@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Companies</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d; --accent:#4f9cf9; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:1000px; margin:0 auto; padding:24px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 18px; }
+    table { width:100%; border-collapse:collapse; background:var(--card);
+            border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    th,td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+    tr:last-child td { border-bottom:0; }
+    .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px;
+            background:#20304a; border:1px solid var(--line); }
+    .g { color:#4fd18b; } .u { color:var(--muted); }
+    .empty { color:var(--muted); text-align:center; padding:48px; background:var(--card);
+             border:1px solid var(--line); border-radius:12px; }
+    .foot { color:var(--muted); font-size:12px; margin-top:20px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Companies</h1>
+    <p class="sub">Your network grouped by organization. Run <code>POST /company/scan</code> to fill prominence.</p>
+
+    {% if companies %}
+    <table>
+      <thead><tr><th>Company</th><th>Contacts</th><th>Senior</th><th>Top priority</th><th>Prominence</th></tr></thead>
+      <tbody>
+        {% for c in companies %}
+        <tr>
+          <td><a href="/?q={{ c.name | urlencode }}">{{ c.name }}</a></td>
+          <td>{{ c.contacts }}</td>
+          <td>{{ c.senior or 0 }}</td>
+          <td>{{ c.top_importance or 0 }}</td>
+          <td>{% if c.org_tier %}<span class="pill {{ 'g' if c.org_tier=='global' else '' }}">{{ c.org_tier }}</span>{% else %}<span class="u">—</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">No companies yet — import or add contacts first.</div>
+    {% endif %}
+
+    <p class="foot">Click a company to see its people. Prominence comes from the Wikidata company scan.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<nav style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:0 0 20px;
+            padding:10px 0;border-bottom:1px solid #26344d;font-size:14px">
+  <strong style="color:#e6edf6">PNCA</strong>
+  <a href="/" style="color:#8aa0bd">Home</a>
+  <a href="/tasks" style="color:#8aa0bd">Tasks</a>
+  <a href="/pipeline" style="color:#8aa0bd">Pipeline</a>
+  <a href="/ask" style="color:#8aa0bd">Ask</a>
+  <a href="/review" style="color:#8aa0bd">Review</a>
+  <details style="position:relative;display:inline-block">
+    <summary style="color:#8aa0bd;cursor:pointer;list-style:none">More ▾</summary>
+    <div style="position:absolute;top:24px;left:0;z-index:20;background:#182234;
+                border:1px solid #26344d;border-radius:10px;padding:6px;min-width:150px;
+                display:flex;flex-direction:column;gap:2px;box-shadow:0 6px 20px rgba(0,0,0,.4)">
+      <a href="/companies" style="color:#8aa0bd;padding:6px 10px;border-radius:6px">Companies</a>
+      <a href="/network" style="color:#8aa0bd;padding:6px 10px;border-radius:6px">Network</a>
+      <a href="/insights" style="color:#8aa0bd;padding:6px 10px;border-radius:6px">Insights</a>
+      <a href="/data-health" style="color:#8aa0bd;padding:6px 10px;border-radius:6px">Health</a>
+      <a href="/calendar" style="color:#8aa0bd;padding:6px 10px;border-radius:6px">Planning</a>
+      <a href="/settings" style="color:#8aa0bd;padding:6px 10px;border-radius:6px">Settings</a>
+    </div>
+  </details>
+</nav>
+{% if request.query_params.get('flash') %}
+<div style="background:#12351f;border:1px solid #2f6b45;color:#8ff0b8;border-radius:10px;
+            padding:10px 14px;margin:0 0 18px;font-size:14px">✓ {{ request.query_params.get('flash') }}</div>
+{% endif %}

@@ -1,0 +1,27 @@
+# Local dev/runtime for PNCA. Bound to 127.0.0.1 only (SPEC.md §12) — the container
+# listens on 0.0.0.0 internally but is reachable solely via the host loopback mapping.
+services:
+  pnca:
+    build: .
+    image: pnca:dev
+    ports:
+      - "127.0.0.1:8199:8199"     # host loopback only -> container 8199 (port from app.yaml)
+    volumes:
+      - ./data:/app/data          # persist SQLite + uploads on the host (gitignored)
+    environment:
+      PNCA_LLM_BASE_URL: http://ollama:11434
+    depends_on:
+      - ollama
+    restart: "no"
+
+  # Local LLM (SPEC.md §7, §17). CPU-only; models persist on a named volume.
+  # Not published to the host — only the pnca service reaches it over the compose network.
+  ollama:
+    image: ollama/ollama
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: "no"
+
+volumes:
+  ollama_models:
+    name: ollama_models   # reuse the volume where the model was pulled (avoids re-download)

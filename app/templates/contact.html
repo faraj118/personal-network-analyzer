@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — {{ d.contact.first_name or '' }} {{ d.contact.last_name or '' }}</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d;
+            --accent:#4f9cf9; --ok:#4fd18b; --no:#f0705a; --gold:#f0c24d; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:900px; margin:0 auto; padding:32px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 2px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 18px; }
+    h2 { font-size:15px; margin:24px 0 10px; border-left:3px solid var(--accent); padding-left:10px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+    .row { display:flex; justify-content:space-between; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); }
+    .row:last-child { border-bottom:0; }
+    .k { color:var(--muted); }
+    .prov { font-size:11px; color:var(--muted); }
+    .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px;
+            background:#20304a; border:1px solid var(--line); margin-right:4px; }
+    .bar { height:6px; border-radius:4px; background:#20304a; margin-top:6px; overflow:hidden; width:220px; }
+    .bar > i { display:block; height:100%; background:var(--accent); }
+    .src { font-size:12px; }
+    form.add { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; }
+    .actions .card { flex:1; min-width:260px; margin-bottom:0; }
+    input, select { background:#0f1826; color:var(--ink); border:1px solid var(--line);
+                    border-radius:8px; padding:7px 9px; }
+    button { border:0; border-radius:8px; padding:7px 12px; font-weight:600; cursor:pointer; }
+    .go { background:var(--accent); color:#04101f; }
+    .accept { background:var(--ok); color:#04120a; } .reject { background:var(--no); color:#1a0603; }
+    .empty { color:var(--muted); }
+    .foot { color:var(--muted); font-size:12px; margin-top:22px; }
+    details.sec { margin:0; }
+    details.sec > summary { font-size:15px; margin:24px 0 10px; border-left:3px solid var(--line);
+                            padding-left:10px; cursor:pointer; list-style:none; color:var(--ink); }
+    details.sec > summary::-webkit-details-marker { display:none; }
+    details.sec > summary::after { content:" ▾"; color:var(--muted); font-size:12px; }
+    details.sec[open] > summary { border-left-color:var(--accent); }
+    details.sec[open] > summary::after { content:" ▴"; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>{{ d.contact.first_name or '' }} {{ d.contact.last_name or '' }}</h1>
+    <p class="sub"><a href="/">← Back to contacts</a>
+       · {{ d.contact.job_title or '—' }}{% if d.contact.company %} @ {{ d.contact.company }}{% endif %}
+       · last contacted: {{ d.last_contact or 'never' }}</p>
+
+    <h2>Who they are</h2>
+    <div class="card">
+      {% for k in ['job_title','company','email','phone','location','industry','seniority'] %}
+      <div class="row">
+        <span class="k">{{ k.replace('_',' ') }}</span>
+        <span>{{ d.contact[k] or '—' }}
+          {% if d.provenance.get(k) %}<span class="prov">· {{ d.provenance[k] }}</span>{% endif %}</span>
+      </div>
+      {% endfor %}
+      <div class="row"><span class="k">website</span>
+        <span>{% if d.contact.website %}<a href="{{ d.contact.website }}" target="_blank" rel="noopener">{{ d.contact.website }}</a>{% else %}—{% endif %}</span></div>
+      <div class="row"><span class="k">org prominence</span>
+        <span>{% if d.contact.org_tier %}<span class="pill">{{ d.contact.org_tier }}</span>{% else %}<span class="prov">not scanned — run a company scan</span>{% endif %}</span></div>
+      <div class="row"><span class="k">priority</span>
+        <span>{{ d.contact.importance or 0 }}<div class="bar"><i style="width: {{ d.contact.importance or 0 }}%"></i></div></span></div>
+    </div>
+
+    <h2>Do something</h2>
+    <div class="actions">
+      <div class="card">
+        <form class="add" method="post" action="/ui/contact/{{ d.contact.id }}/draft">
+          <span class="k">✍️ Draft a message</span>
+          <select name="intent">
+            {% for i in ['reconnect','congratulate','intro','follow_up'] %}
+            <option value="{{ i }}" {% if draft_intent == i %}selected{% endif %}>{{ i.replace('_', ' ') }}</option>{% endfor %}
+          </select>
+          <button class="go" type="submit">Draft with local AI</button>
+        </form>
+        {% if draft %}
+        <textarea style="width:100%;min-height:110px;margin-top:10px;background:#0f1826;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px">{{ draft }}</textarea>
+        <p class="prov" style="margin:6px 0 0">Draft only — review &amp; edit before sending. Generated locally, never sent.</p>
+        {% elif draft is defined and draft is none %}
+        <p class="prov" style="margin:8px 0 0">Local AI is off — enable <code>llm.enabled: true</code> in config/app.yaml and run Ollama to draft.</p>
+        {% endif %}
+      </div>
+      <div class="card">
+        <form class="add" method="post" action="/ui/contact/{{ d.contact.id }}/brief">
+          <span class="k">🧭 Prep before you talk</span>
+          <button class="go" type="submit">Brief me</button>
+        </form>
+        {% if brief %}
+        <div style="white-space:pre-wrap;margin-top:10px;background:#0f1826;border:1px solid var(--line);border-radius:8px;padding:10px">{{ brief }}</div>
+        <p class="prov" style="margin:6px 0 0">Generated locally from what's on this page — verify before relying on it.</p>
+        {% elif brief is defined and brief is none %}
+        <p class="prov" style="margin:8px 0 0">Local AI is off — enable <code>llm.enabled</code> + Ollama to generate a brief.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <h2>🗓 Interactions</h2>
+    <div class="card">
+      <form class="add" method="post" action="/ui/contact/{{ d.contact.id }}/interaction">
+        <input name="occurred_on" type="date" title="Date (defaults to today)" />
+        <select name="kind">
+          {% for k in ['met','call','email','message','note','intro'] %}<option>{{ k }}</option>{% endfor %}
+        </select>
+        <input name="note" placeholder="What happened?" style="flex:1;min-width:220px" />
+        <button class="go" type="submit">Log</button>
+      </form>
+      {% if d.interactions %}
+        {% for i in d.interactions %}
+        <div class="row"><span><span class="pill">{{ i.kind }}</span> {{ i.note or '—' }}</span>
+          <span class="prov">{{ i.occurred_on }}</span></div>
+        {% endfor %}
+      {% else %}<p class="empty" style="margin:8px 0 0">No interactions logged yet — log your first above so PNCA can track when to reconnect.</p>{% endif %}
+    </div>
+
+    <h2>📋 Tasks</h2>
+    <div class="card">
+      <form class="add" method="post" action="/ui/tasks/add">
+        <input type="hidden" name="contact_id" value="{{ d.contact.id }}" />
+        <input type="hidden" name="next" value="/contact/{{ d.contact.id }}" />
+        <input name="title" placeholder="A task about this person…" required style="flex:1;min-width:220px" />
+        <input name="due_date" type="date" title="Due date (optional)" />
+        <button class="go" type="submit">Add task</button>
+      </form>
+      {% for t in tasks | default([]) %}
+      <div class="row">
+        <span>{% if t.done %}<span class="prov">✓</span> <s>{{ t.title }}</s>{% else %}{{ t.title }}{% endif %}
+          {% if t.due_date %}<span class="prov">· due {{ t.due_date }}</span>{% endif %}</span>
+        <span>
+          {% if not t.done %}<form method="post" action="/ui/tasks/{{ t.id }}/done" style="display:inline"><input type="hidden" name="next" value="/contact/{{ d.contact.id }}" /><button class="go">Done</button></form>
+          {% else %}<form method="post" action="/ui/tasks/{{ t.id }}/reopen" style="display:inline"><input type="hidden" name="next" value="/contact/{{ d.contact.id }}" /><button>Reopen</button></form>{% endif %}
+          <form method="post" action="/ui/tasks/{{ t.id }}/delete" style="display:inline" onsubmit="return confirm('Delete this task?')"><input type="hidden" name="next" value="/contact/{{ d.contact.id }}" /><button class="reject">✕</button></form>
+        </span>
+      </div>
+      {% else %}<p class="empty" style="margin:8px 0 0">No tasks for this person yet.</p>{% endfor %}
+    </div>
+
+    <details class="sec">
+      <summary>✏️ Edit details <span class="prov">(edits persist across rebuilds)</span></summary>
+      <div class="card">
+        <form class="add" method="post" action="/ui/contact/{{ d.contact.id }}/edit">
+          <input name="first_name" placeholder="First name" value="{{ d.contact.first_name or '' }}" style="max-width:110px" />
+          <input name="last_name" placeholder="Last name" value="{{ d.contact.last_name or '' }}" style="max-width:110px" />
+          <input name="email" placeholder="Email" value="{{ d.contact.email or '' }}" style="min-width:170px" />
+          <input name="phone" placeholder="Phone" value="{{ d.contact.phone or '' }}" style="min-width:140px" />
+          <input name="job_title" placeholder="Title" value="{{ d.contact.job_title or '' }}" />
+          <select name="seniority">
+            <option value="">Seniority…</option>
+            {% for s in ['C-Level','Director','Manager','Entry','Unknown'] %}
+            <option value="{{ s }}" {% if d.contact.seniority == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+          </select>
+          <input name="company" placeholder="Company" value="{{ d.contact.company or '' }}" />
+          <input name="website" placeholder="Company website" value="{{ d.contact.website or '' }}" style="min-width:160px" />
+          <input name="location" placeholder="Location" value="{{ d.contact.location or '' }}" />
+          <select name="opportunity">
+            <option value="">Opportunity…</option>
+            {% for o in ['Client','Partner','Supplier','Other'] %}
+            <option value="{{ o }}" {% if d.contact.opportunity == o %}selected{% endif %}>{{ o }}</option>{% endfor %}
+            {% if d.contact.opportunity %}<option value="__clear__">— clear —</option>{% endif %}
+          </select>
+          <select name="pipeline_stage" title="Opportunity stage">
+            <option value="">Pipeline…</option>
+            {% for st in ['Idea','Talking','Proposal','Won','Lost'] %}
+            <option value="{{ st }}" {% if d.contact.pipeline_stage == st %}selected{% endif %}>{{ st }}</option>{% endfor %}
+            {% if d.contact.pipeline_stage %}<option value="__clear__">— clear —</option>{% endif %}
+          </select>
+          <input name="follow_up_date" type="date" value="{{ d.contact.follow_up_date or '' }}" />
+          <input name="tags" placeholder="tags (comma-sep)" value="{{ d.contact.tags or '' }}" style="flex:1;min-width:140px" />
+          <input name="notes" placeholder="notes" value="{{ d.contact.notes or '' }}" style="flex:1;min-width:200px" />
+          <button class="go" type="submit">Save</button>
+        </form>
+        <form method="post" action="/ui/contact/{{ d.contact.id }}/delete" style="margin-top:8px"
+              onsubmit="return confirm('Delete this contact? (stays deleted across rebuilds)')">
+          <button class="reject">Delete contact</button>
+        </form>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>🧮 Why this priority <span class="prov">(total {{ d.score.total }}{% if d.score.capped %}, capped from {{ d.score.raw }}{% endif %})</span></summary>
+      <div class="card">
+        {% for comp in d.score.components %}
+        <div class="row"><span class="k">{{ comp.factor }}</span>
+          <span>{{ comp.detail }} <b>{{ '%+d' % comp.points }}</b></span></div>
+        {% endfor %}
+        <p class="prov" style="margin:8px 0 0">Points come from the rubric (seniority, industry vs your targets, location, opportunity). Edit fields above to change them; tune the weights in <code>config/rubric.yaml</code>.</p>
+      </div>
+    </details>
+
+    <details class="sec">
+      <summary>🌐 Info found online <span class="prov">(sourced facts, signals &amp; add-your-own)</span></summary>
+
+      <h2 style="border-left-color:var(--line)">Sourced additions <span class="prov">(accepted — each traceable to a source)</span></h2>
+      {% if d.accepted_claims %}
+      <div class="card">
+        {% for c in d.accepted_claims %}
+        <div class="row"><span><b>{{ c.field }}</b>: {{ c.value }}</span>
+          <span class="src"><a href="{{ c.source_url }}" target="_blank" rel="noopener">source</a></span></div>
+        {% endfor %}
+      </div>
+      {% else %}<p class="empty">None yet.</p>{% endif %}
+
+      {% if d.pending_claims %}
+      <h2 style="border-left-color:var(--line)">⏳ Pending <span class="prov">(awaiting review — not part of the profile yet)</span></h2>
+      <div class="card">
+        {% for c in d.pending_claims %}
+        <div class="row">
+          <span><b>{{ c.field }}</b> → {{ c.value }} <span class="src"><a href="{{ c.source_url }}" target="_blank">src</a></span></span>
+          <span>
+            <form method="post" action="/ui/review/{{ c.id }}/accept" style="display:inline"><button class="accept">Accept</button></form>
+            <form method="post" action="/ui/review/{{ c.id }}/reject" style="display:inline"><button class="reject">Reject</button></form>
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <h2 style="border-left-color:var(--line)">📰 Signals</h2>
+      {% if d.signals %}
+      <div class="card">
+        {% for s in d.signals %}
+        <div class="row"><span><span class="pill">{{ s.kind }}</span> {{ s.summary }}</span>
+          <span class="src"><a href="{{ s.source_url }}" target="_blank" rel="noopener">source</a></span></div>
+        {% endfor %}
+      </div>
+      {% else %}<p class="empty">No signals for this contact.</p>{% endif %}
+
+      <h2 style="border-left-color:var(--line)">Add info you found online</h2>
+      <div class="card">
+        <p class="prov" style="margin:0 0 10px">For something you saw on a website (their new title, company page, LinkedIn…).
+          It's saved with the link and waits in <a href="/review">Review</a> until you accept it —
+          so every fact keeps its source. To edit directly, use <b>Edit details</b> above.</p>
+        <form class="add" method="post" action="/ui/contact/{{ d.contact.id }}/claim">
+          <select name="field" title="What kind of info">
+            {% for f in ['job_title','company','location','email','phone','website','bio','profile_url'] %}
+            <option value="{{ f }}">{{ f.replace('_', ' ') }}</option>{% endfor %}
+          </select>
+          <input name="value" placeholder="The info (e.g. their new title)" required style="flex:1;min-width:180px" />
+          <input name="source_url" placeholder="Link — where you saw it (required)" required style="flex:1;min-width:220px" />
+          <button class="go" type="submit">Save to review</button>
+        </form>
+      </div>
+    </details>
+
+    <p class="foot">Profile built locally from info with sources + signals · nothing invented.</p>
+  </div>
+</body>
+</html>

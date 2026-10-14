@@ -1,0 +1,44 @@
+# Industry keyword gazetteer (SPEC.md §6). Maps keyword -> industry label.
+# Unknown industries stay 'Unknown' — never guessed.
+Tech:
+  - software
+  - saas
+  - technology
+  - it services
+  - cloud
+  - fintech
+  - ai
+  - data
+Manufacturing:
+  - manufacturing
+  - factory
+  - fabrication
+  # NOTE: 'production' removed — too generic (matched "Water Melon Production", a media co).
+  # NOTE: 'industrial' removed — matches non-factory names; re-add if a real case needs it.
+Fintech:
+  - fintech
+  - payments
+  - digital payment
+  - digital payments
+  - paytech
+  - wallet
+  - remittance
+  - payment gateway
+Oil & Gas:
+  - oil
+  - gas
+  - petroleum
+  - energy
+  - upstream
+  - downstream
+Finance:
+  - bank
+  - banking
+  - investment
+  - insurance
+  - capital
+Construction:
+  - construction
+  - contracting
+  - civil
+  - engineering

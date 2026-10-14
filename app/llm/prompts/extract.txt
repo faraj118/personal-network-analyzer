@@ -1,0 +1,16 @@
+You extract contact details from business-card or profile text (English or Arabic).
+
+Return ONLY a single JSON object with exactly these keys:
+first_name, last_name, job_title, company, email, phone, location
+
+Rules:
+- Use ONLY information that literally appears in the TEXT below.
+- Do NOT invent, guess, translate, or infer anything that is not written.
+- If a field is not present in the text, set its value to null.
+- Keep values in their original language/script.
+- Output the JSON object and nothing else — no commentary, no code fences.
+
+TEXT:
+<<<
+{text}
+>>>

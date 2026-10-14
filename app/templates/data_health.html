@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Data Health</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d; --accent:#4f9cf9; --warn:#f0a34d; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:960px; margin:0 auto; padding:24px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 18px; }
+    h2 { font-size:15px; margin:22px 0 10px; border-left:3px solid var(--accent); padding-left:10px; }
+    .cards { display:flex; gap:12px; flex-wrap:wrap; }
+    .stat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px; min-width:150px; }
+    .stat .n { font-size:24px; font-weight:700; }
+    .stat .l { color:var(--muted); font-size:12px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:10px; }
+    .row { display:flex; justify-content:space-between; gap:12px; padding:5px 0; border-bottom:1px solid var(--line); }
+    .row:last-child { border-bottom:0; }
+    .btn { display:inline-block; background:var(--accent); color:#04101f; border-radius:8px; padding:8px 14px; font-weight:600; margin-right:8px; }
+    .empty { color:var(--muted); }
+    .foot { color:var(--muted); font-size:12px; margin-top:20px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Data Health</h1>
+    <p class="sub">Fix gaps and keep your network clean. {{ h.total }} contacts.</p>
+
+    <h2>Missing information <span style="font-size:12px;color:var(--muted)">— click a card to see &amp; fix those contacts</span></h2>
+    <div class="cards">
+      <a class="stat" href="/?missing=email" style="color:inherit"><div class="n">{{ h.missing_email }}</div><div class="l">no email</div></a>
+      <a class="stat" href="/?missing=company" style="color:inherit"><div class="n">{{ h.missing_company }}</div><div class="l">no company</div></a>
+      <a class="stat" href="/?missing=title" style="color:inherit"><div class="n">{{ h.missing_title }}</div><div class="l">no title</div></a>
+      <a class="stat" href="/?missing=seniority" style="color:inherit"><div class="n">{{ h.unknown_seniority }}</div><div class="l">unknown seniority</div></a>
+      <a class="stat" href="/?missing=industry" style="color:inherit"><div class="n">{{ h.unknown_industry }}</div><div class="l">no industry</div></a>
+      <div class="stat" title="Important contacts you haven't touched in 180+ days"><div class="n">{{ h.stale_important }}</div><div class="l">important &amp; stale (180d)</div></div>
+    </div>
+
+    <h2>Flagged for review ({{ h.needs_review | length }}) <span style="font-size:12px;color:var(--muted)">— possible duplicates / merge conflicts</span></h2>
+    <div class="card">
+      {% if h.needs_review %}
+        {% for c in h.needs_review[:50] %}
+        <div class="row"><a href="/contact/{{ c.id }}">{{ c.name or '(unnamed)' }}</a>
+          <span class="empty">{{ c.company or '—' }}</span></div>
+        {% endfor %}
+        {% if h.needs_review|length > 50 %}<p class="empty" style="margin-top:8px">…and {{ h.needs_review|length - 50 }} more.</p>{% endif %}
+      {% else %}<p class="empty">Nothing flagged. 👌</p>{% endif %}
+    </div>
+
+    <h2>Backup</h2>
+    <div class="card">
+      <a class="btn" href="/export?format=json">Download full backup (JSON)</a>
+      <a class="btn" href="/export?format=csv">Download CSV</a>
+      <p class="foot" style="margin:10px 0 0">Your data lives only on this machine — download a backup regularly.</p>
+    </div>
+  </div>
+</body>
+</html>

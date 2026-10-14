@@ -1,0 +1,38 @@
+# Title gazetteer (SPEC.md §6). Maps a normalized title token -> seniority enum.
+# Hand-tuned; extend as real cards arrive. Match is case-insensitive on tokens.
+C-Level:
+  - ceo
+  - cfo
+  - coo
+  - cto
+  - cmo
+  - chief executive officer
+  - chief financial officer
+  - chief operating officer
+  - chief technology officer
+  - founder
+  - co-founder
+  - owner
+  - president
+  - managing director
+  - partner
+Director:
+  - director
+  - head of
+  - vp
+  - vice president
+  - general manager
+Manager:
+  - manager
+  - lead
+  - team lead
+  - supervisor
+  - principal
+Entry:
+  - intern
+  - trainee
+  - assistant
+  - junior
+  - associate
+  - analyst
+  - coordinator

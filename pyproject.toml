@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pnca"
+version = "0.0.0"
+description = "Personal Network & Contact Analyzer: a local-first, private CRM with network graph discovery"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Faraj Elburkie" }]
+
+# --- CORE: enough to boot the API and run config/db/graph. Installed in Phase 0. ---
+dependencies = [
+  "fastapi>=0.115,<1.0",
+  "uvicorn[standard]>=0.30,<1.0",
+  "pydantic>=2.7,<3.0",
+  "pydantic-settings>=2.3,<3.0",
+  "pyyaml>=6.0,<7.0",
+  "pandas>=2.2,<3.0",
+  "sqlalchemy>=2.0,<3.0",
+  "jinja2>=3.1,<4.0",
+  "python-multipart>=0.0.9",   # FastAPI file uploads
+  "email-validator>=2.1,<3.0",
+  "phonenumbers>=8.13",
+  "rapidfuzz>=3.9,<4.0",
+  "networkx>=3.3,<4.0",
+  "httpx>=0.27,<1.0",          # Ollama client + enrichment fetch
+]
+
+[project.optional-dependencies]
+# Card OCR (Phase 1b). Lean v1 = Tesseract + Pillow (the local LLM cleans up the text).
+# Heavier engines (opencv/paddleocr/easyocr) are an accuracy upgrade for later.
+ocr = [
+  "pytesseract>=0.3.10",
+  "pillow>=10.0",
+]
+ocr-heavy = [
+  "opencv-python-headless>=4.9,<5.0",
+  "paddleocr>=2.7",
+  "easyocr>=1.7",
+]
+nlp = [
+  "spacy>=3.7,<4.0",
+  # en_core_web_lg is installed as a model, not a PyPI dep:
+  #   python -m spacy download en_core_web_lg
+]
+dedup = [
+  "recordlinkage>=0.16",
+]
+# Free-source enrichment (SPEC.md §18). No paid brokers.
+enrich = [
+  "selectolax>=0.3.21",   # fast HTML parsing
+  "feedparser>=6.0",      # RSS/Atom signal sources
+]
+dev = [
+  "ruff>=0.5,<1.0",
+  "black>=24.4,<25.0",
+  "pytest>=8.2,<9.0",
+  "httpx>=0.27,<1.0",   # FastAPI TestClient
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

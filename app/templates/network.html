@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Your network map</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d;
+            --accent:#4f9cf9; --gold:#f0c24d; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:1100px; margin:0 auto; padding:32px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 20px; }
+    h2 { font-size:16px; margin:28px 0 12px; border-left:3px solid var(--accent); padding-left:10px; }
+    h2 .hint { color:var(--muted); font-weight:400; font-size:13px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+    .item { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+    .item.bridge { border-color:var(--gold); }
+    .name { font-weight:600; }
+    .meta { color:var(--muted); font-size:13px; }
+    .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px;
+            background:#20304a; border:1px solid var(--line); margin-right:4px; }
+    table { width:100%; border-collapse:collapse; background:var(--card);
+            border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    th,td { text-align:left; padding:9px 14px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+    tr:last-child td { border-bottom:0; }
+    .empty { color:var(--muted); text-align:center; padding:48px; background:var(--card);
+             border:1px solid var(--line); border-radius:12px; }
+    .foot { color:var(--muted); font-size:12px; margin-top:24px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Your network map</h1>
+    <p class="sub"><a href="/">← Back to contacts</a> · The hidden shape of your network — who connects whom,
+       your best-connected people, and where the gaps are. Worked out on your machine, no scraping.</p>
+
+    {% if d.hubs or d.bridges %}
+
+    <h2>🌉 Bridges <span class="hint">— people linking otherwise-separate clusters (the strategic ones you can't name from memory)</span></h2>
+    {% if d.bridges %}
+    <div class="grid">
+      {% for b in d.bridges %}
+      <div class="item bridge">
+        <div class="name">{{ b.name }}</div>
+        <div class="meta">{{ b.company or '—' }}</div>
+        <div style="margin-top:6px">
+          <span class="pill" title="How often this person sits on the shortest path between others — higher means a stronger bridge">bridge score {{ b.betweenness }}</span>
+          <span class="pill" title="How many contacts they're directly tied to">{{ b.degree }} connections</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}<div class="empty">No bridges yet. Bridges are people who link separate clusters — they need a
+      <b>cross-company tie</b>. LinkedIn exports carry no location, so your contacts only link within their own
+      company. Add <b>location</b> (via enrichment or business cards) to reveal who connects your circles.</div>{% endif %}
+
+    <h2>⭐ Hubs <span class="hint">— your most-connected contacts</span></h2>
+    <table>
+      <thead><tr><th>Name</th><th>Company</th><th>Seniority</th><th>Connections</th></tr></thead>
+      <tbody>
+        {% for h in d.hubs %}
+        <tr><td>{{ h.name }}</td><td>{{ h.company or '—' }}</td>
+            <td><span class="pill">{{ h.seniority or 'Unknown' }}</span></td><td>{{ h.degree }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>🧩 Groups <span class="hint">— clusters of people who share ties (often the same company or circle)</span></h2>
+    <div class="grid">
+      {% for c in d.communities %}
+      <div class="item">
+        <div class="name">Group of {{ c.size }}</div>
+        <div class="meta">{{ c.members | map(attribute='name') | join(', ') }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <h2>📊 Coverage <span class="hint">— how your network breaks down</span></h2>
+    <div class="grid">
+      <div class="item">
+        <div class="name">Target-industry contacts</div>
+        <div class="meta">{{ d.gaps.target_industry_total }} total · {{ d.gaps.target_industry_senior }} senior (C-Level/Director)</div>
+      </div>
+      <div class="item">
+        <div class="name">By seniority</div>
+        <div class="meta">{% for k,v in d.gaps.by_seniority.items() %}<span class="pill">{{ k }}: {{ v }}</span>{% endfor %}</div>
+      </div>
+      <div class="item">
+        <div class="name">By industry</div>
+        <div class="meta">{% for k,v in d.gaps.by_industry.items() %}<span class="pill">{{ k }}: {{ v }}</span>{% endfor %}</div>
+      </div>
+    </div>
+
+    {% if d.warm_leads %}
+    <h2>🔥 Warm leads <span class="hint">— connected to a known Client/Partner</span></h2>
+    <div class="grid">
+      {% for w in d.warm_leads %}
+      <div class="item"><div class="name">{{ w.name }}</div><div class="meta">{{ w.company or '—' }} · via {{ w.via }}</div></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="empty">No network yet — <a href="/">import contacts</a> first, then discovery lights up.</div>
+    {% endif %}
+
+    <p class="foot">Worked out on your machine · no cloud, no scraping.</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PNCA — Ask</title>
+  <style>
+    :root { --bg:#0f1420; --card:#182234; --ink:#e6edf6; --muted:#8aa0bd; --line:#26344d; --accent:#4f9cf9; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink);
+           font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width:960px; margin:0 auto; padding:24px 20px 64px; }
+    a { color:var(--accent); text-decoration:none; }
+    h1 { margin:0 0 4px; font-size:24px; }
+    .sub { color:var(--muted); margin:0 0 16px; }
+    form.ask { display:flex; gap:8px; margin-bottom:14px; }
+    input { flex:1; background:#0f1826; color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:10px 12px; }
+    button { background:var(--accent); color:#04101f; border:0; border-radius:8px; padding:10px 16px; font-weight:600; cursor:pointer; }
+    .interp { color:var(--muted); font-size:13px; margin-bottom:14px; }
+    .pill { display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; background:#20304a; border:1px solid var(--line); }
+    table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    th,td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); }
+    th { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+    tr:last-child td { border-bottom:0; }
+    .empty { color:var(--muted); text-align:center; padding:40px; background:var(--card); border:1px solid var(--line); border-radius:12px; }
+    .foot { color:var(--muted); font-size:12px; margin-top:18px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% include "_nav.html" %}
+    <h1>Ask your network</h1>
+    <p class="sub">Plain English, e.g. “senior fintech people in Tripoli” or “directors I haven’t contacted”.</p>
+
+    <form class="ask" action="/ask" method="get">
+      <input name="question" value="{{ question }}" placeholder="Ask a question about your contacts…" autofocus />
+      <button type="submit">Ask</button>
+    </form>
+
+    {% if question %}
+      <div class="interp">
+        {% if query._fallback %}Local AI is off — showing a plain text search for “{{ question }}”.
+        {% else %}Interpreted as:
+          {% for k, v in query.items() %}{% if not k.startswith('_') %}<span class="pill">{{ k }}: {{ v }}</span> {% endif %}{% endfor %}
+        {% endif %}
+      </div>
+      {% if results %}
+      <table>
+        <thead><tr><th>Name</th><th>Title</th><th>Company</th><th>Seniority</th><th>Priority</th></tr></thead>
+        <tbody>
+          {% for c in results %}
+          <tr>
+            <td><a href="/contact/{{ c.id }}">{{ (c.first_name or '') ~ ' ' ~ (c.last_name or '') }}</a></td>
+            <td>{{ c.job_title or '—' }}</td><td>{{ c.company or '—' }}</td>
+            <td><span class="pill">{{ c.seniority or 'Unknown' }}</span></td><td>{{ c.importance or 0 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p class="foot">{{ results|length }} match(es). The AI only interprets your question; results come from your local data.</p>
+      {% else %}<div class="empty">No matches for that question.</div>{% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Card photos + their labels are personal data — kept local by default (SPEC.md §12).
+# If this repo is private and you want a reproducible, versioned golden set,
+# force-add them: `git add -f tests/golden/card01.jpg tests/golden/card01.expected.json`
+*.jpg
+*.jpeg
+*.png
+*.expected.json
+
+# ...but keep the folder + docs in git:
+!README.md
+!.gitignore
