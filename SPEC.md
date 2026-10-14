@@ -116,7 +116,7 @@ pnca/
   data/
     uploads/  pnca.db     # gitignored
   tests/golden/           # labeled cards + expected extraction
-  Dockerfile  docker-compose.yml   # python:3.11-slim app + ollama service
+  Dockerfile  docker-compose.yml   # python:3.14-slim app + ollama service
   SPEC.md
 ```
 

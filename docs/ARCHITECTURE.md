@@ -145,7 +145,7 @@ contact cascades to its enrichment records, signals and other personal data (era
 ## Runtime and deployment
 
 - **Docker** (`Dockerfile`, `docker-compose.yml`) is the supported runtime:
-  `python:3.11-slim`, running as non-root UID 1000 so files on the mounted `./data` volume
+  `python:3.14-slim`, running as non-root UID 1000 so files on the mounted `./data` volume
   are owned by your user.
 - Localhost-only (§12) is enforced by the compose mapping `127.0.0.1:8199:8199`. The
   container process listens on `0.0.0.0` via the `PNCA_HOST` env override; port 8199 always
