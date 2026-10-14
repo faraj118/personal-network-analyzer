@@ -37,7 +37,7 @@ ocr = [
   "pillow>=10.0",
 ]
 ocr-heavy = [
-  "opencv-python-headless>=4.9,<5.0",
+  "opencv-python-headless>=4.9,<6.0",
   "paddleocr>=2.7",
   "easyocr>=1.7",
 ]
