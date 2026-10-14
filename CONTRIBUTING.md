@@ -12,7 +12,7 @@ especially §14 (conventions) and §15 (hard boundaries).
 |---|---|
 | New to open source | Issues labelled [`good first issue`](https://github.com/faraj118/personal-network-analyzer/issues?q=is%3Aopen+label%3A%22good+first+issue%22) |
 | A Python developer | Issues labelled [`help wanted`](https://github.com/faraj118/personal-network-analyzer/issues?q=is%3Aopen+label%3A%22help+wanted%22) |
-| A designer | Synthetic business cards (#1), screenshots (#8), UI polish |
+| A designer | Synthetic business cards (#1), right-to-left layout (#7), UI polish |
 | An Arabic speaker | Arabic UI and right-to-left layout (#7), checking Arabic card extraction |
 | A user | Bug reports, feature ideas in [Discussions](https://github.com/faraj118/personal-network-analyzer/discussions), docs fixes |
 
@@ -97,14 +97,19 @@ If you think a boundary should change, open a Discussion first (see [`GOVERNANCE
 
 ## Attribution policy
 
-The commit author is the only attribution. Commit messages, PR titles and PR bodies must not
-contain:
+Credit goes to people. If you paired with someone, credit them with a normal
+`Co-authored-by: Name <email>` trailer; that's welcome.
 
-- `Co-authored-by:` trailers
-- "Generated with/by [tool]" footers or 🤖 markers from any code-generation or AI tool
+What's not allowed is attribution to code-generation or AI tools. Commit messages, PR titles
+and PR bodies must not contain:
+
+- `Co-authored-by:` trailers for a tool or bot (a `[bot]` account or a generic `noreply@`
+  vendor address)
+- "Generated with/by [tool]" footers or 🤖 markers
 - `*-Session: <url>` trailers linking to a tool's session
 
-Configure your tools so they don't add these. Two layers enforce the rule:
+You're responsible for every line you submit, however you wrote it. Configure your tools so
+they don't add these markers. Two layers enforce the rule:
 
 1. **Local hook** (`git config core.hooksPath .githooks`) rejects an offending commit
    message before the commit is made.

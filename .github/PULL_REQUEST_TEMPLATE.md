@@ -15,4 +15,4 @@ Closes #
 - [ ] Docs updated in this PR if behaviour or structure changed (README, `docs/`, `SPEC.md`)
 - [ ] No real personal data anywhere (code, fixtures, screenshots)
 - [ ] Stays within the hard boundaries in `SPEC.md §15`
-- [ ] No co-author trailers or tool-generated footers in commits or this description
+- [ ] No AI/tool attribution (bot co-author lines, generated-by footers) in commits or this description
