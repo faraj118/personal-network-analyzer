@@ -1,0 +1,39 @@
+name: Attribution policy
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  no-attribution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Commit messages
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+        run: |
+          if [ "$EVENT" = pull_request ]; then
+            range="$BASE..$HEAD"
+          elif [ "$BEFORE" = 0000000000000000000000000000000000000000 ]; then
+            range="-1 $SHA"
+          else
+            range="$BEFORE..$SHA"
+          fi
+          git log --format=%B $range | scripts/check_attribution.sh
+
+      - name: PR title and body
+        if: github.event_name == 'pull_request'
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+          BODY: ${{ github.event.pull_request.body }}
+        run: printf '%s\n%s\n' "$TITLE" "$BODY" | scripts/check_attribution.sh
