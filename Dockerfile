@@ -1,6 +1,6 @@
 # PNCA dev/runtime image. Python 3.11 = every ML wheel has a known-good build,
 # unlike the host's 3.14. Local-only tool; kept localhost-only via the compose port mapping.
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
