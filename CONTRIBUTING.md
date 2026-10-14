@@ -9,6 +9,7 @@ contain:
 
 - `Co-authored-by:` trailers
 - "Generated with/by [tool]" footers or 🤖 markers from any code-generation or AI tool
+- `*-Session: <url>` trailers linking to a tool's session
 
 Configure your tools so they don't add these. Two layers enforce the rule:
 
