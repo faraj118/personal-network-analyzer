@@ -55,9 +55,8 @@ account, or acting as an appointed representative at an online or offline event.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the
-community leaders responsible for enforcement through the maintainer's contact page at
-<https://www.mobarmej.ly>, or privately through the repository's
-[private reporting form](https://github.com/faraj118/personal-network-analyzer/security/advisories/new)
+community leaders responsible for enforcement at conduct@mobarmej.ly, or privately through
+the repository's [private reporting form](https://github.com/faraj118/personal-network-analyzer/security/advisories/new)
 (start the title with "Conduct:"). All complaints will be reviewed and investigated promptly
 and fairly.
 
