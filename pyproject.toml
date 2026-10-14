@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pnca"
-version = "0.0.0"
+version = "0.1.0"
 description = "Personal Network & Contact Analyzer: a local-first, private CRM with network graph discovery"
 readme = "README.md"
 requires-python = ">=3.11"
