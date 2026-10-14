@@ -1,0 +1,109 @@
+Notes:
+"Synthetic demo data for PNCA. Every person and company here is fictional."
+
+First Name,Last Name,URL,Email Address,Company,Position,Connected On
+Marco,Sabri,,,Zaytuna Pay,CEO,18 Jul 2023
+Chloe,Laurent,,,Zaytuna Pay,Head of Partnerships,08 Jan 2022
+Salma,Hamdan,,,Zaytuna Pay,Director of Payments,22 Jul 2025
+Rania,Murad,,,Zaytuna Pay,Business Analyst,13 Nov 2025
+Lina,Laurent,,,Zaytuna Pay,Software Engineer,10 Jul 2021
+Dina,Haddad,,,Zaytuna Pay,Business Analyst,13 Sep 2019
+Salma,Najjar,,,Zaytuna Pay,Operations Associate,09 Jul 2023
+Daniel,Sabri,,,Zaytuna Pay,Software Engineer,05 Jan 2025
+Elena,Weber,,,Zaytuna Pay,Compliance Manager,08 Jan 2022
+Farah,Weber,,,Zaytuna Pay,Risk Analyst,18 Jul 2021
+Dina,Taher,,,Zaytuna Pay,Risk Analyst,14 Mar 2022
+Nour,Haddad,,,Zaytuna Pay,Engineering Manager,15 Sep 2023
+Reem,Darwish,,,Zaytuna Pay,Risk Analyst,25 Jul 2023
+Chloe,Weber,,,Zaytuna Pay,Sales Manager,04 Jul 2025
+Marco,Ghanem,,,Zaytuna Pay,Data Analyst,16 Jan 2024
+Sophie,Karam,,,Zaytuna Pay,Engineering Manager,05 Jul 2022
+Karim,Haddad,,,Wadi Cloud Systems,CFO,03 Sep 2025
+Leila,Saleh,,,Wadi Cloud Systems,Managing Director,09 Nov 2023
+Fadi,Nasser,,,Wadi Cloud Systems,Director of Payments,19 Jul 2023
+Tarek,Taher,,,Wadi Cloud Systems,Compliance Manager,23 Sep 2023
+Malik,Weber,,,Wadi Cloud Systems,Engineering Manager,17 Jul 2021
+Nadia,Sabri,,,Wadi Cloud Systems,Compliance Manager,13 Jan 2019
+يوسف,القاسم,,,Wadi Cloud Systems,Risk Analyst,01 Jan 2025
+Samir,Weber,,,Wadi Cloud Systems,Marketing Specialist,16 Jul 2019
+Ali,Nasser,,,Wadi Cloud Systems,Operations Associate,11 Jul 2023
+Lina,Taher,,,Wadi Cloud Systems,Software Engineer,02 Nov 2020
+Yusuf,Qasim,,,Wadi Cloud Systems,Compliance Manager,05 Nov 2019
+Elena,Nasser,,,Wadi Cloud Systems,Engineering Manager,18 Jul 2022
+Anas,Hamdan,,,Sahel Microfinance,Founder & CEO,15 Jul 2021
+Malik,Hamdan,,,Sahel Microfinance,Head of Partnerships,16 Jul 2023
+Elena,Ghanem,,,Sahel Microfinance,Director of Payments,03 Jul 2019
+Malik,Taher,,,Sahel Microfinance,Product Manager,12 Sep 2020
+James,Darwish,,,Sahel Microfinance,Sales Manager,24 Mar 2023
+Nour,Weber,,,Sahel Microfinance,Data Analyst,04 Jul 2021
+Yusuf,Karam,,,Sahel Microfinance,Product Manager,19 Jan 2021
+Samir,Barakat,,,Sahel Microfinance,Business Analyst,28 May 2022
+Amal,Mansour,,,Sahel Microfinance,Engineering Manager,04 Nov 2019
+Fadi,Jaber,,,Sahel Microfinance,Operations Associate,20 Jan 2024
+Samir,Zaki,,,Corniche Ventures,Founder & CEO,22 Jan 2022
+Marco,Weber,,,Corniche Ventures,Head of Partnerships,12 Jan 2025
+Aya,Haddad,,,Corniche Ventures,Head of Partnerships,24 Jan 2021
+Malik,Jaber,,,Corniche Ventures,Software Engineer,07 Sep 2021
+ليلى,الحداد,,,Corniche Ventures,Engineering Manager,02 Mar 2019
+Aya,Youssef,,,Corniche Ventures,Sales Manager,08 Jul 2022
+Tarek,Barakat,,,Corniche Ventures,Software Engineer,22 Sep 2023
+Adam,Nasser,,,Corniche Ventures,Product Manager,16 Jul 2023
+Samir,Nasser,,,Nourlink Telecom,CEO,21 Sep 2019
+Huda,Rossi,,,Nourlink Telecom,Managing Director,22 Jan 2019
+Leila,Rahal,,,Nourlink Telecom,Director of Payments,28 Mar 2023
+Yasmin,Carter,,,Nourlink Telecom,Data Analyst,11 Mar 2021
+Farah,Rossi,,,Nourlink Telecom,Operations Associate,19 May 2024
+Malik,Nasser,,,Nourlink Telecom,Software Engineer,17 Nov 2025
+Sara,Rossi,,,Nourlink Telecom,Product Manager,24 May 2023
+Hana,Haddad,,,Nourlink Telecom,Data Analyst,10 Sep 2023
+عمر,بن علي,,,Nourlink Telecom,Marketing Specialist,26 Nov 2023
+Marco,Saleh,,,Nourlink Telecom,Engineering Manager,18 May 2021
+Khaled,Barakat,,,Nourlink Telecom,Business Analyst,05 Jul 2021
+Amal,Zaki,,,Nourlink Telecom,Marketing Specialist,25 Sep 2025
+Elena,Haddad,,,Falak Analytics,Founder & CEO,06 Jan 2020
+Amal,Karam,,,Falak Analytics,Director of Payments,18 Mar 2020
+Leila,Nasser,,,Falak Analytics,Director of Payments,28 Nov 2019
+Adam,Zaki,,,Falak Analytics,Risk Analyst,16 Jan 2022
+Leila,Karam,,,Falak Analytics,Operations Associate,25 Jan 2019
+Dina,Ghanem,,,Falak Analytics,Engineering Manager,18 May 2023
+Sophie,Murad,,,Falak Analytics,Data Analyst,08 Nov 2022
+Fadi,Najjar,,,Falak Analytics,Marketing Specialist,24 Sep 2022
+Tarek,Najjar,,,Sidra Logistics,CTO,11 May 2019
+Ziad,Ghanem,,,Sidra Logistics,Director of Payments,08 May 2021
+Chloe,Saleh,,,Sidra Logistics,Head of Partnerships,21 Jul 2022
+Chloe,Carter,,,Sidra Logistics,Risk Analyst,22 Jul 2019
+James,Sabri,,,Sidra Logistics,Compliance Manager,02 Jul 2021
+Amal,Ghanem,,,Sidra Logistics,Risk Analyst,19 Nov 2021
+Daniel,Rahal,,,Sidra Logistics,Software Engineer,21 Jan 2020
+Nour,Jaber,,,Sidra Logistics,Engineering Manager,21 May 2023
+Khaled,Taher,,,Sidra Logistics,Product Manager,15 Mar 2020
+Ali,Carter,,,Tamra Foods,CTO,23 Sep 2022
+Chloe,Nasser,,,Tamra Foods,Director of Payments,02 Mar 2022
+Marco,Fathi,,,Tamra Foods,Head of Partnerships,11 May 2021
+Daniel,Ghanem,,,Tamra Foods,Business Analyst,16 Mar 2024
+سارة,المنصوري,,,Tamra Foods,Business Analyst,12 May 2020
+Marco,Laurent,,,Tamra Foods,Business Analyst,27 Jul 2019
+James,Hamdan,,,Tamra Foods,Operations Associate,17 Sep 2023
+Samir,Rahal,,,Tamra Foods,Risk Analyst,03 Sep 2020
+Mariam,Ghanem,,,Qasr Construction,CFO,07 Jan 2023
+Farah,Fathi,,,Qasr Construction,Director of Payments,17 Mar 2025
+Marco,Darwish,,,Qasr Construction,Head of Partnerships,05 Sep 2022
+Samir,Karam,,,Qasr Construction,Operations Associate,07 Mar 2023
+Nadia,Laurent,,,Qasr Construction,Engineering Manager,19 Jan 2024
+Sara,Ghanem,,,Qasr Construction,Data Analyst,23 May 2023
+Tarek,Qasim,,,Qasr Construction,Engineering Manager,06 Nov 2025
+Nadia,Najjar,,,Rimal Insurance,CFO,08 Sep 2021
+Reem,Taher,,,Rimal Insurance,Director of Payments,14 Mar 2024
+Marco,Mansour,,,Rimal Insurance,Head of Partnerships,12 Sep 2019
+Adam,Jaber,,,Rimal Insurance,Engineering Manager,27 Jan 2025
+Aya,Weber,,,Rimal Insurance,Data Analyst,08 Nov 2020
+Sophie,Darwish,,,Rimal Insurance,Data Analyst,14 Nov 2025
+Aya,Qasim,,,Rimal Insurance,Risk Analyst,21 Nov 2021
+Ziad,Taher,,,Jasmine Software House,CFO,24 Mar 2020
+Salma,Khalil,,,Jasmine Software House,Head of Partnerships,23 Mar 2023
+Salma,Barakat,,,Jasmine Software House,Director of Payments,14 Jan 2020
+Nour,Hamdan,,,Jasmine Software House,Marketing Specialist,15 May 2023
+Fadi,Rahal,,,Jasmine Software House,Product Manager,15 Jul 2021
+Yusuf,Carter,,,Jasmine Software House,Business Analyst,15 May 2022
+Elena,Saleh,,,Jasmine Software House,Business Analyst,02 Jan 2023
+Elena,Qasim,,,Jasmine Software House,Software Engineer,26 Sep 2024

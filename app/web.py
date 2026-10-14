@@ -89,10 +89,11 @@ def home(
     seniority: str = "",
     tag: str = "",
     pipeline_stage: str = "",
-    min_score: int | None = None,
+    min_score: str = "",  # str: the search form always submits it, usually empty
     missing: str = "",
 ) -> HTMLResponse:
-    active = any([q, industry, seniority, tag, pipeline_stage, min_score, missing])
+    score = int(min_score) if min_score.strip().isdigit() else None
+    active = any([q, industry, seniority, tag, pipeline_stage, score, missing])
     conn = connect()
     try:
         all_contacts = fetch_contacts(conn)
@@ -104,7 +105,7 @@ def home(
                 seniority=seniority or None,
                 tag=tag or None,
                 pipeline_stage=pipeline_stage or None,
-                min_score=min_score,
+                min_score=score,
                 missing=missing or None,
             )
             if active
@@ -137,7 +138,7 @@ def home(
         "seniority": seniority,
         "tag": tag,
         "pipeline_stage": pipeline_stage,
-        "min_score": min_score if min_score is not None else "",
+        "min_score": score if score is not None else "",
         "missing": missing,
     }
     return templates.TemplateResponse(

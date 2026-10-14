@@ -11,7 +11,7 @@
 [![Help wanted](https://img.shields.io/github/issues/faraj118/personal-network-analyzer/help%20wanted?label=help%20wanted&color=008672)](https://github.com/faraj118/personal-network-analyzer/issues?q=is%3Aopen+label%3A%22help+wanted%22)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Quickstart](#quickstart) · [How it works](#how-it-works) · [Status](#project-status) · [Where this can go](#where-this-can-go) · [**Help wanted**](#call-for-helping-hands) · [Contributing](CONTRIBUTING.md)
+[Quickstart](#quickstart) · [Screenshots](#screenshots) · [How it works](#how-it-works) · [Status](#project-status) · [**Help wanted: Arabic UI**](#call-for-helping-hands) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -24,6 +24,11 @@ your contacts never leave your laptop.
 
 Built in Tripoli, Libya, for people whose networks live in spreadsheets, card holders and
 WhatsApp, not in a Salesforce instance.
+
+<p align="center">
+  <img src="docs/assets/demo.gif" alt="PNCA walkthrough: the Today page, an Arabic name search, the network map with bridge contacts, and the opportunity pipeline" width="900">
+  <br><sub>Today page → searching names in Arabic → network map → pipeline. All people and companies are fictional (<a href="docs/demo/">demo data</a>).</sub>
+</p>
 
 ## Why it exists
 
@@ -48,6 +53,21 @@ nothing about a person is invented or saved without your approval.
 | **Enrich** | Optional, opt-in: free public sources (Wikidata, news RSS) add facts and "job change / funding" signals. Each comes with a source URL and confidence, and nothing is saved until you approve it |
 | **Act** | Today home, follow-ups, tasks, pipeline (kanban), interaction timeline, `.ics` calendar export, CSV/JSON export |
 | **Assist** | Optional local LLM (Ollama): draft a reconnect message, prep a meeting brief, ask your network in plain English |
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/assets/home.png" alt="Today page: open tasks, overdue follow-ups, important contacts gone quiet, and top people to reach"><br><sub><b>Today:</b> what to do and who to reach out to</sub></td>
+    <td width="50%"><img src="docs/assets/network.png" alt="Network map listing bridge contacts with bridge scores and connection counts"><br><sub><b>Network map:</b> bridge contacts who link separate circles</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/assets/pipeline.png" alt="Opportunity pipeline kanban with Idea, Talking, Proposal, Won and Lost columns"><br><sub><b>Pipeline:</b> opportunities by stage</sub></td>
+    <td width="50%"><img src="docs/assets/arabic-search.png" alt="Contact search returning names written in Arabic script"><br><sub><b>Arabic names:</b> stored and searched as written</sub></td>
+  </tr>
+</table>
+
+Try it yourself with the synthetic [demo data](docs/demo/).
 
 ## How it works
 
@@ -217,7 +237,8 @@ pytest -q
 
 ## Project status
 
-Pre-1.0, actively developed by a single maintainer, used daily by its author. 155 automated
+**Latest release: [v0.1.0](https://github.com/faraj118/personal-network-analyzer/releases/tag/v0.1.0).**
+Pre-1.0, actively developed by a single maintainer, used daily by its author. 156 automated
 tests run in CI on every pull request.
 
 | Area | Status |
@@ -228,7 +249,8 @@ tests run in CI on every pull request.
 | Review-gated enrichment (Wikidata, news RSS) + contact profiles | ✅ Shipped |
 | CRM: edit, tags, notes, pipeline, tasks, interactions, calendar export, saved views | ✅ Shipped |
 | Local LLM assist: outreach drafts, meeting briefs, ask-your-network | ✅ Shipped |
-| Visual network graph · encryption at rest · vCard · Arabic UI | 🔜 Planned, help wanted |
+| Arabic interface + right-to-left layout | 🔜 Top priority, help wanted ([#7](https://github.com/faraj118/personal-network-analyzer/issues/7)) |
+| Visual network graph · encryption at rest · vCard | 🔜 Planned, help wanted |
 
 Full backlog: [`docs/FEATURES.md`](docs/FEATURES.md) · phases: [`docs/ROADMAP.md`](docs/ROADMAP.md) · changes: [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -248,9 +270,29 @@ that approach.
 
 ## Call for helping hands
 
-You don't need to be a Python expert. Some of the most valuable help needs design, Arabic, or
-research skills. Pick something below, comment on the issue, and the maintainer will help you
-get started.
+### 🌍 Headline call: make PNCA speak Arabic ([#7](https://github.com/faraj118/personal-network-analyzer/issues/7))
+
+PNCA already reads Arabic business cards and stores Arabic names as written, but its
+interface is English only. An Arabic interface with a proper right-to-left layout is the single
+biggest step towards making this a tool for the region. **You don't need Python for it**:
+translating the interface text, reviewing wording, and fixing the RTL layout in HTML/CSS are
+all valuable.
+
+<div dir="rtl" align="right">
+
+**نداء للمطوّرين والمتطوّعين العرب، وخاصة في ليبيا:** يقرأ PNCA بطاقات العمل العربية ويحفظ
+الأسماء العربية كما هي، لكن واجهته ما زالت بالإنجليزية فقط. نبحث عمّن يساعد في ترجمة الواجهة
+إلى العربية ودعم الكتابة من اليمين إلى اليسار. لا تحتاج إلى خبرة في بايثون: الترجمة ومراجعة
+الصياغة وتنسيق الواجهة مساهمات مهمة. ابدأ من
+[المهمة رقم 7](https://github.com/faraj118/personal-network-analyzer/issues/7) واترك
+تعليقًا لنعرف أنك تعمل عليها.
+
+</div>
+
+### More ways to help
+
+Pick something below, comment on the issue, and the maintainer will help you get started.
+Several tasks need design, Arabic or research skills rather than code.
 
 | Help needed | Skills | Issue |
 |---|---|---|
@@ -260,8 +302,6 @@ get started.
 | vCard import/export | Python | [#4](https://github.com/faraj118/personal-network-analyzer/issues/4) · good first issue |
 | "Why?" breakdown of the priority score | Python, HTML | [#5](https://github.com/faraj118/personal-network-analyzer/issues/5) · good first issue |
 | Find a robots-permitted news feed (MENA sources welcome) | Research, Python | [#6](https://github.com/faraj118/personal-network-analyzer/issues/6) |
-| Arabic UI translation + right-to-left layout | Arabic, HTML/CSS | [#7](https://github.com/faraj118/personal-network-analyzer/issues/7) |
-| Synthetic demo data + screenshots for this README | Writing, design | [#8](https://github.com/faraj118/personal-network-analyzer/issues/8) · good first issue |
 | Higher-accuracy OCR engine, benchmarked | Python, OCR | [#9](https://github.com/faraj118/personal-network-analyzer/issues/9) |
 | Versioned releases and changelog automation | GitHub Actions, Docker | [#15](https://github.com/faraj118/personal-network-analyzer/issues/15) |
 

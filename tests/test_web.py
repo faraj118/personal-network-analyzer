@@ -33,6 +33,19 @@ def test_home_renders() -> None:
     assert "PNCA — Your Network" in r.text
 
 
+def test_search_form_with_empty_min_score() -> None:
+    """The search form always submits every field; an empty min score must not 422."""
+    client = TestClient(app)
+    client.post(
+        "/ui/upload", files={"files": ("Connections.csv", _CSV.encode("utf-8"), "text/csv")}
+    )
+    r = client.get("/?q=Khalil&industry=&seniority=&pipeline_stage=&tag=&min_score=")
+    assert r.status_code == 200
+    assert "Khalil" in r.text
+    assert client.get("/?min_score=abc").status_code == 200  # junk is ignored, not an error
+    assert client.get("/?min_score=101").status_code == 200
+
+
 def test_upload_then_home_shows_scored_contact() -> None:
     client = TestClient(app)
     up = client.post(
