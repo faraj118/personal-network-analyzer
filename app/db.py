@@ -406,11 +406,9 @@ def insights_summary(conn: sqlite3.Connection) -> dict:
 def pipeline_board(conn: sqlite3.Connection) -> dict:
     """Contacts grouped by pipeline stage (Kanban columns), highest priority first."""
     board: dict[str, list[dict]] = {s: [] for s in PIPELINE_STAGES}
-    rows = conn.execute(
-        """SELECT * FROM contacts
+    rows = conn.execute("""SELECT * FROM contacts
            WHERE pipeline_stage IS NOT NULL AND TRIM(pipeline_stage) != ''
-           ORDER BY importance DESC, last_name"""
-    ).fetchall()
+           ORDER BY importance DESC, last_name""").fetchall()
     for r in rows:
         d = dict(r)
         if d["pipeline_stage"] in board:
