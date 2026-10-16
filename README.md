@@ -291,6 +291,10 @@ all valuable.
 
 ### More ways to help
 
+Open calls for help, with how many people each needs and when it closes, are also posted on
+the project's page on [mobarmej.ly](https://mobarmej.ly/community/projects/personal-network-analyzer),
+where contributions merged here are credited on your community profile.
+
 Pick something below, comment on the issue, and the maintainer will help you get started.
 Several tasks need design, Arabic or research skills rather than code.
 
