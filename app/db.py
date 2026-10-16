@@ -347,6 +347,18 @@ def fetch_contact(conn: sqlite3.Connection, contact_id: str) -> dict | None:
     return dict(row) if row else None
 
 
+def fetch_source_kinds(conn: sqlite3.Connection, ids: list[str]) -> dict[str, str]:
+    """source_record id -> its source ('linkedin_export', 'business_card', 'manual', ...)."""
+    ids = [i for i in ids if isinstance(i, str)]
+    if not ids:
+        return {}
+    marks = ",".join("?" * len(ids))
+    rows = conn.execute(
+        f"SELECT id, source FROM source_records WHERE id IN ({marks})", ids
+    ).fetchall()
+    return {r["id"]: r["source"] for r in rows}
+
+
 def data_health_summary(conn: sqlite3.Connection) -> dict:
     """Data quality: missing key fields, flagged-for-review, and dormant-important counts."""
     contacts = fetch_contacts(conn)

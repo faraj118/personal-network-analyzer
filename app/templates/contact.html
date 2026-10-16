@@ -58,7 +58,7 @@
       <div class="row">
         <span class="k">{{ k.replace('_',' ') }}</span>
         <span>{{ d.contact[k] or '—' }}
-          {% if d.provenance.get(k) %}<span class="prov">· {{ d.provenance[k] }}</span>{% endif %}</span>
+          {% if d.provenance_labels.get(k) %}<span class="prov">· {{ d.provenance_labels[k] }}</span>{% endif %}</span>
       </div>
       {% endfor %}
       <div class="row"><span class="k">website</span>

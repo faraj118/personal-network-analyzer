@@ -63,6 +63,7 @@ def guess_card_fields(text: str) -> dict[str, str]:
         if _COMPANY_HINTS.search(ln):
             guess["company"] = ln
             break
+    name_line = None
     for ln in text_lines:
         if ln in (guess.get("job_title"), guess.get("company")):
             continue
@@ -74,7 +75,17 @@ def guess_card_fields(text: str) -> dict[str, str]:
         ):
             guess["first_name"] = words[0]
             guess["last_name"] = " ".join(words[1:])
+            name_line = ln
             break
+    # Many company names carry no hint word ("Zaytuna Pay"). Fall back to the first remaining
+    # short line that isn't the name or title; comma lines are usually addresses.
+    if "company" not in guess:
+        for ln in text_lines:
+            if ln in (guess.get("job_title"), name_line) or _TITLE_HINTS.search(ln):
+                continue
+            if "," not in ln and len(ln.split()) <= 6 and any(c.isalpha() for c in ln):
+                guess["company"] = ln
+                break
     return guess
 
 

@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from app.config import get_config
 from app.db import init_db
-from app.enrichment.profile import assemble_profile
+from app.enrichment.profile import assemble_profile, provenance_labels
 from app.main import app
 
 _CSV = (
@@ -66,6 +66,31 @@ def test_profile_endpoint_and_page() -> None:
     assert set(d) >= {"contact", "accepted_claims", "pending_claims", "signals", "sources_count"}
     page = client.get(f"/contact/{cid}")
     assert page.status_code == 200 and "Khalil" in page.text
+
+
+def test_contact_page_shows_readable_origin_not_record_ids() -> None:
+    client = TestClient(app)
+    cid = _seed(client)
+    raw = client.get(f"/contacts/{cid}").json()["field_provenance"]["job_title"]
+    page = client.get(f"/contact/{cid}").text
+    assert "from LinkedIn import" in page
+    assert raw not in page  # the internal source_record id is never shown
+
+
+def test_provenance_labels_maps_each_origin() -> None:
+    prov = {
+        "job_title": "sr-1",
+        "phone": "sr-2",
+        "company": "https://example.com/about",
+        "location": "sr-unknown",
+        "_conflicts": {"company": ["A", "B"]},
+    }
+    kinds = {"sr-1": "linkedin_export", "sr-2": "business_card"}
+    assert provenance_labels(prov, kinds) == {
+        "job_title": "from LinkedIn import",
+        "phone": "from business card",
+        "company": "found online",
+    }
 
 
 def test_add_claim_via_detail_then_accept_shows_in_profile() -> None:
