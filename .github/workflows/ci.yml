@@ -30,3 +30,27 @@ jobs:
 
       - name: Pytest
         run: pytest -q
+
+  # The Quickstart path: build the real image, run the tests inside it, then start the app and
+  # use it the way a new user would. Catches base-image and dependency breakage.
+  docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build image
+        run: docker build -t pnca:ci .
+
+      - name: Tests inside the image
+        run: docker run --rm pnca:ci python -m pytest -q -p no:cacheprovider
+
+      - name: Start app, import demo data, open pages
+        run: |
+          docker run -d --name pnca -p 127.0.0.1:8199:8199 pnca:ci
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8199/health && break; sleep 2; done
+          curl -sf -F "files=@docs/demo/Connections.csv" http://127.0.0.1:8199/ingest
+          for p in / /network /pipeline /companies /tasks /calendar /review /settings; do
+            curl -sf -o /dev/null "http://127.0.0.1:8199$p" || { echo "FAILED: $p"; docker logs pnca; exit 1; }
+          done
+          cid=$(curl -sf http://127.0.0.1:8199/contacts | python3 -c "import json,sys; print(json.load(sys.stdin)['contacts'][0]['id'])")
+          curl -sf -o /dev/null "http://127.0.0.1:8199/contact/$cid" || { echo "FAILED: contact page"; docker logs pnca; exit 1; }
