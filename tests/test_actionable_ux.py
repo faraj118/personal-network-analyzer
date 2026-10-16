@@ -40,6 +40,20 @@ def test_guess_card_fields_extracts_name_title_company_without_llm() -> None:
     assert "Acme" in g["company"]
 
 
+def test_guess_card_company_without_hint_word() -> None:
+    """Company names like "Zaytuna Pay" have no Inc/Group/Bank word; fall back to the leftover line."""
+    text = "Sara Haddad\nHead of Partnerships\nZaytuna Pay\nsara@example.com\n+218 91 234 5678"
+    g = guess_card_fields(text)
+    assert (g["first_name"], g["last_name"]) == ("Sara", "Haddad")
+    assert g["job_title"] == "Head of Partnerships"
+    assert g["company"] == "Zaytuna Pay"
+
+
+def test_guess_card_company_skips_address_line() -> None:
+    text = "Sara Haddad\nHead of Partnerships\nTripoli, Libya\nsara@example.com"
+    assert "company" not in guess_card_fields(text)
+
+
 def test_read_card_prefills_fields_with_stub_ocr() -> None:
     text = "Omar Salah\nSales Manager\nDelta Solutions\nomar@delta.ly"
     card = read_card(b"x", origin_file="c.jpg", ocr_fn=lambda _b: (text, 0.81), llm=None)
