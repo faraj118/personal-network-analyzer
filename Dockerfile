@@ -1,6 +1,6 @@
 # PNCA dev/runtime image (Python 3.14; every dependency ships a prebuilt 3.14 wheel).
 # Local-only tool; kept localhost-only via the compose port mapping.
-FROM python:3.14-slim
+FROM python:3.15-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
